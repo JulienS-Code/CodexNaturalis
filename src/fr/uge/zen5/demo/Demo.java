@@ -25,7 +25,7 @@ class Area {
 	}
 }
 
-public class Demo {
+public class Demo {   
 
 	private static void checkRange(double min, double value, double max) {
 		if (value < min || value > max) {
@@ -53,6 +53,7 @@ public class Demo {
 					continue;
 				}
 				var action = event.getAction();
+				System.out.println(action);
 				if (action == Action.KEY_PRESSED) {
 					System.out.println(event.getKey());
 				} else if (action == Action.KEY_RELEASED) {
