@@ -1,5 +1,9 @@
 package fr.uge.codex;
 
-public interface Card {
-
+public class Card {
+	// corner
+	// recto / verso
+	// Type ressources (4)
+	// Score
+	// Cost (goldcard)
 }
