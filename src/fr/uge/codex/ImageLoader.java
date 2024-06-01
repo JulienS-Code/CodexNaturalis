@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
-import fr.uge.codex.Card.ResourceType;
+import fr.uge.codex.card.CornerType;
 
 /**
  * The ImageLoader class deals with retrieving and storing images from files.
@@ -18,7 +18,7 @@ import fr.uge.codex.Card.ResourceType;
  *
  */
 public class ImageLoader {
-    public static BufferedImage get(ResourceType resource, boolean isCard) {
+    public static BufferedImage get(CornerType resource, boolean isCard) {
     	String fp;
     	String filename;
         if (isCard) {
