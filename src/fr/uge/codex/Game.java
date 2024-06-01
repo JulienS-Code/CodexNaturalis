@@ -2,11 +2,10 @@ package fr.uge.codex;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.awt.geom.Rectangle2D;
 
 import fr.uge.codex.card.Deck;
 import fr.uge.codex.card.ResourceCard;
-import fr.uge.codex.card.ResourceType;
 import fr.uge.memory.SimpleGameData;
 import fr.uge.memory.SimpleGameView;
 
@@ -30,22 +29,21 @@ public class Game {
 	}
 	
 	public static void main(String[] args) {
-//		Application.run(Color.LIGHT_GRAY, Game::codexNaturalis);
-		
-		Menu menu = new Menu();
-		menu.renderMenu();
-        
-//        var lstCorners = new ArrayList<ResourceType>();
-//        lstCorners.add(ResourceType.Animal);
-//        lstCorners.add(ResourceType.Fungi);
-//        lstCorners.add(ResourceType.Insect);
-//        lstCorners.add(ResourceType.Animal);
-//        ResourceCard card = new ResourceCard(lstCorners, ResourceType.Animal, 0);
 		Deck deck = new Deck();
         ResourceCard card = deck.getFirstCard();
 		
         Application.run(Color.BLACK, context -> {
- 
+        	Menu.renderMenu(context);
+        	
+        	context.renderFrame(graphics -> {
+                Graphics2D g2d = (Graphics2D) graphics;
+                g2d.fill(new Rectangle2D.Float(
+    				0, 0,
+    				context.getScreenInfo().getWidth(),
+    				context.getScreenInfo().getHeight())
+                );
+            }); // On efface le menu
+        	
             while (true) {
                 context.renderFrame(graphics -> {
                     Graphics2D g2d = (Graphics2D) graphics;
@@ -55,7 +53,8 @@ public class Game {
                     card.draw(g2d, 200, 400, 1);
                 });
 
-                context.pollOrWaitEvent(10);
+                // On attend une action
+                context.pollOrWaitEvent(1000);
             }
         });
 	}
