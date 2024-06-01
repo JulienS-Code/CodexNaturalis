@@ -68,11 +68,11 @@ public class GoldCard implements Card {
 			        break;
 			    case 2:
 			        // bas gauche
-			        ImageLoader.draw(g2d, (int) x, (int)((y + 78 * scale) - 24 * scale), img, scale);
+			        ImageLoader.draw(g2d, (int) x, (int)((y + 80 * scale) - 24 * scale), img, scale);
 			    	break;
 			    case 3:
 			        // bas droite
-			        ImageLoader.draw(g2d, (int)((x + 120 * scale) - 24 * scale), (int)((y + 78 * scale) - 24 * scale), img, scale);
+			        ImageLoader.draw(g2d, (int)((x + 120 * scale) - 24 * scale), (int)((y + 80 * scale) - 24 * scale), img, scale);
 			    	break;
 			    default:
 			        System.err.println("Erreur: Plus de 4 coins?");
@@ -83,7 +83,7 @@ public class GoldCard implements Card {
 	
 	public void drawBase(Graphics2D g2d, double x, double y, double scale) {
 		// Taille de carte par défaut : 120x78
-		BufferedImage img = ImageLoader.get(kingdom, true);
+		BufferedImage img = ImageLoader.get(kingdom, true, true);
 		ImageLoader.draw(g2d, (int)x, (int) y, img, scale);
 		
 	}
