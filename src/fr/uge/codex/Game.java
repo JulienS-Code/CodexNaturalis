@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-import fr.uge.codex.card.Deck;
-import fr.uge.codex.card.ResourceCard;
+import fr.uge.codex.deck.Deck;
+import fr.uge.codex.deck.card.ResourceCard;
 import fr.uge.memory.SimpleGameData;
 import fr.uge.memory.SimpleGameView;
 
@@ -30,6 +30,7 @@ public class Game {
 	
 	public static void main(String[] args) {
 		Deck deck = new Deck();
+		System.out.println(deck);
         ResourceCard card = deck.getFirstCard();
 		
         Application.run(Color.BLACK, context -> {
