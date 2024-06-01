@@ -19,23 +19,23 @@ import fr.uge.codex.card.CornerType;
  */
 public class ImageLoader {
     public static BufferedImage get(CornerType resource, boolean isCard) {
-    	String fp;
-    	String filename;
         if (isCard) {
-        	fp = "./data/img/cards/";
-            filename = resource.toString().toLowerCase() + ".png";
-        } else {
-            fp = "./data/img/icons/";
-            filename = "icon_" + resource.toString().toLowerCase() + ".png";
+            return imageFromPath(
+        		"./data/img/cards/" + resource.toString().toLowerCase() + ".png"
+    		);
         }
-
-        Path imagePath = Paths.get(fp, filename);
         
+        return imageFromPath(
+        	"./data/img/icons/icon_ " + resource.toString().toLowerCase() + ".png"
+        );
+    }
+
+    public static BufferedImage imageFromPath(String path) {
         try {
-        	return ImageIO.read(imagePath.toFile());
-        } catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	        return ImageIO.read(Paths.get(path).toFile());
+	    } catch (IOException e) {
+	        throw new RuntimeException(e);
+	    }
     }
     
     public static void draw(Graphics2D g2d, int x, int y, BufferedImage img, double scale) {
