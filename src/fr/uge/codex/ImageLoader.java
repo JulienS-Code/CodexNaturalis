@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
-import fr.uge.codex.card.CornerType;
+import fr.uge.codex.deck.card.CornerType;
 
 public class ImageLoader {
 	
@@ -41,6 +41,7 @@ public class ImageLoader {
         try {
 	        return ImageIO.read(path.toFile());
 	    } catch (IOException e) {
+	    	System.out.println(path); // Pour afficher le chemin qu'il ne trouve pas
 	        throw new RuntimeException(e);
 	    }
     }
