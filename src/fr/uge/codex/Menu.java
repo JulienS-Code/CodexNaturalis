@@ -85,7 +85,7 @@ public class Menu {
 				renderTitle(g2d, w, h);
              });
 
-            Event event = context.pollOrWaitEvent(10);
+            Event event = context.pollOrWaitEvent(1000);
             
             if (event == null){
             	continue; 
