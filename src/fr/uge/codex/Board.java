@@ -3,11 +3,14 @@ package fr.uge.codex;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import fr.uge.codex.deck.card.Card;
+import fr.uge.codex.deck.card.CornerType;
 import fr.uge.codex.deck.card.GoldCard;
+import fr.uge.codex.deck.card.OtherCornerType;
 import fr.uge.codex.deck.card.ResourceCard;
 import fr.umlv.zen5.ApplicationContext;
 
@@ -31,11 +34,25 @@ public class Board {
 	}
 	
 	public boolean add(Card card, int x, int y) {
+		return add(card, x, y, false);
+	}
+	
+	public boolean add(Card card, int x, int y, boolean isStarter) {
 		Objects.requireNonNull(card);
 		
 		if (grid.get(x, y) != null) {
+			System.out.println("DEBUG: La case ("+x+","+y+") est déjà occupée");
 			return false;
 		}
+		
+		
+		if (!isStarter) {
+			if (!isPlayable(x, y)) {
+				System.out.println("DEBUG: La case ("+x+","+y+") n'est pas jouable");
+				return false;
+			}
+		}
+		
 		grid.add(x, y, card);
 		return true;
 		
@@ -138,5 +155,138 @@ public class Board {
 		Xoffset = 0;
 		Yoffset = 0;
 		needsReset = true;
+	}
+	
+	public boolean isPlayable(int x, int y) {
+		if (grid.get(x, y) != null) {
+			return false;
+		}
+		
+		var corners = new ArrayList<CornerType>();
+		
+		//TODO: Vérifier si la carte est retournée, si oui on prend son verso
+		
+		
+		corners.addAll(checkNeighbors(x, y));
+
+		corners.addAll(checkDiagonals(x, y));
+		
+		if (corners.isEmpty()) {
+			return false;
+		} // pas de carte voisine
+		
+		
+		for (CornerType corner : corners) {
+			if (corner instanceof OtherCornerType) {
+				if ((OtherCornerType) corner == OtherCornerType.Invisible) {
+					return false; // invisible = coin non jouable
+				}
+			}
+		}
+
+		return true;
+	}
+	
+	
+	private List<Point> getNeighbors(int x, int y) {
+		List<Point> neighbors = new ArrayList<>();
+		neighbors.add(new Point(x, y - 1));
+		neighbors.add(new Point(x, y + 1));
+		neighbors.add(new Point(x - 1, y));
+		neighbors.add(new Point(x + 1, y));
+		return neighbors;
+	}
+	
+	private List<Point> getDiagonals(int x, int y) {
+		List<Point> diagonals = new ArrayList<>();
+		diagonals.add(new Point(x - 1, y - 1));
+		diagonals.add(new Point(x - 1, y + 1));
+		diagonals.add(new Point(x + 1, y - 1));
+		diagonals.add(new Point(x + 1, y + 1));
+		return diagonals;
+	}
+	
+	private List<CornerType> checkNeighbors(int x, int y) {
+		
+		List<Point> neighbors = getNeighbors(x, y);
+		
+		var corners = new ArrayList<CornerType>();
+		for (Point point : neighbors) {
+	        Card card = grid.get(point);
+	        
+	        if (card == null) {
+	        	continue;
+	        }
+	        
+	        int xOffset = point.x - x;
+	        int yOffset = point.y - y;
+
+	        switch (xOffset) {
+	            case -1: // Gauche
+	                corners.add(card.getRecto()[1]);
+	                corners.add(card.getRecto()[3]);
+	                break;
+	            case 1: // Droite
+	                corners.add(card.getRecto()[0]);
+	                corners.add(card.getRecto()[2]);
+	                break;
+	            default: // même x donc haut ou bas
+	                switch (yOffset) {
+	                    case -1: // Haut
+	                        corners.add(card.getRecto()[2]);
+	                        corners.add(card.getRecto()[3]);
+	                        break;
+	                    case 1: // Bas
+	                        corners.add(card.getRecto()[0]);
+	                        corners.add(card.getRecto()[1]);
+	                        break;
+	                }
+	                break;
+	        }
+	    }
+		return corners;
+	}
+	
+	
+	private List<CornerType> checkDiagonals(int x, int y) {
+		
+		var diagonals = getDiagonals(x, y);
+		var corners = new ArrayList<CornerType>();
+		
+		for (Point point : diagonals) {
+	        Card card = grid.get(point);
+	        
+	        if (card == null) {
+	        	continue;
+	        }
+
+	        int xOffset = point.x - x;
+	        int yOffset = point.y - y;
+
+	        switch (xOffset) {
+	            case -1:
+	                switch (yOffset) {
+	                    case -1:
+	                        corners.add(card.getRecto()[0]);
+	                        break;
+	                    case 1:
+	                        corners.add(card.getRecto()[2]);
+	                        break;
+	                }
+	                break;
+	            case 1:
+	                switch (yOffset) {
+	                    case -1:
+	                        corners.add(card.getRecto()[1]);
+	                        break;
+	                    case 1:
+	                        corners.add(card.getRecto()[3]);
+	                        break;
+	                }
+	                break;
+	        }
+	    }
+		
+		return corners;
 	}
 }
