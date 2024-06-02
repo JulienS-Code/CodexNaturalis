@@ -7,21 +7,13 @@ import fr.uge.codex.deck.card.Card;
 
 public class Player {
 	private final int id;
-	private int score;
+	private final Inventary inventary;
 	private final List<Card> hand;
 	
 	public Player(int id) {
 		this.id = id;
-		this.score = 0;
+		this.inventary = new Inventary();
 		this.hand = new ArrayList<Card>();
-	}
-
-	public int score() {
-		return score;
-	}
-
-	public void addPoints(int pts) {
-		this.score += pts;
 	}
 
 	public int id() {
@@ -38,7 +30,7 @@ public class Player {
 		builder.append("Player ");
 		builder.append(id);
 		builder.append(" qui a ");
-		builder.append(score);
+		builder.append(inventary.score());
 		builder.append(" points ");
 		return builder.toString();
 	}
