@@ -11,6 +11,9 @@ import fr.uge.memory.SimpleGameView;
 
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.ApplicationContext;
+import fr.umlv.zen5.Event;
+import fr.umlv.zen5.Event.Action;
+import fr.umlv.zen5.KeyboardKey;
 
 public class Game {
 	
@@ -35,7 +38,12 @@ public class Game {
 		
         Application.run(Color.BLACK, context -> {
         	Menu.renderMenu(context);
-        	
+        	Board board = new Board(context);
+			board.add(card, 0, 0);
+			board.add(card, 1, 0);
+			board.add(card, 2, 1);
+			board.add(card, 1, 1);
+			
         	context.renderFrame(graphics -> {
                 Graphics2D g2d = (Graphics2D) graphics;
                 g2d.fill(new Rectangle2D.Float(
@@ -48,14 +56,59 @@ public class Game {
             while (true) {
                 context.renderFrame(graphics -> {
                     Graphics2D g2d = (Graphics2D) graphics;
-                    
-                    card.draw(g2d, 100, 600, 2);
-                    card.draw(g2d, 500, 600, 0.5);
-                    card.draw(g2d, 200, 400, 1);
+					board.display(g2d);
                 });
 
                 // On attend une action
-                context.pollOrWaitEvent(1000);
+                
+                Event event = context.pollOrWaitEvent(1000);
+				if (event == null) {
+					continue;
+				}
+				
+				if (event.getAction() == Action.KEY_PRESSED) {
+					switch (event.getKey().toString()) {
+						// Quitter
+						case "Q":
+							context.exit(0);
+							return;
+						
+						// Zoom
+						case "I":
+							board.zoomIn();
+							break;
+						case "O":
+							board.zoomOut();
+							break;
+						case "P":
+							board.zoomReset();
+							break;
+						
+						// Mouvement du plateau
+						case "UP":
+							board.move(0, -25);
+							break;
+						case "DOWN":
+							board.move(0, 25);
+							break;
+						case "LEFT":
+							board.move(-25, 0);
+							break;
+						case "RIGHT":
+							board.move(25, 0);
+							break;
+						case "R":
+							board.moveReset();
+							break;
+                        
+						// DEBUG
+						default:
+							System.out.println(event.getKey().toString());
+							break;
+					}
+				} else {
+					System.out.println(event.getAction().toString());
+				}
             }
         });
 	}
