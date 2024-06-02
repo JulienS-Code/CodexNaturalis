@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import fr.uge.codex.deck.card.ArtifactType;
@@ -36,9 +38,7 @@ public class GoldsDeck {
 			while ((line = reader.readLine()) != null) {
 				createCardFromLine(line);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	public void createCardFromLine(String line) {
@@ -98,6 +98,17 @@ public class GoldsDeck {
 			} 
 		}
 		return cost;
+	}
+	
+	public void shuffleDeck() {
+		Collections.shuffle(goldCards);
+	}
+	
+	public GoldCard pick() {
+		if (goldCards.isEmpty()) {
+            throw new NoSuchElementException("No cards left in the deck.");
+        }
+		return goldCards.removeFirst();
 	}
 
 	@Override

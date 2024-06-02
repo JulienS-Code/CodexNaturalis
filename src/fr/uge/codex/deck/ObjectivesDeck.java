@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import fr.uge.codex.deck.card.ArtifactObjectiveCard;
@@ -27,9 +29,7 @@ public class ObjectivesDeck {
 			while ((line = reader.readLine()) != null) {
 				createCardFromLine(line);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	public void createCardFromLine(String line) {
@@ -103,6 +103,17 @@ public class ObjectivesDeck {
         		word.equals("BottomLeft") || word.equals("BottomRight") || 
         		word.equals("Top") || word.equals("Bottom");
     }
+	
+	public void shuffleDeck() {
+		Collections.shuffle(objectiveCards);
+	}
+	
+	public ObjectiveCard pick() {
+		if (objectiveCards.isEmpty()) {
+            throw new NoSuchElementException("No cards left in the deck.");
+        }
+		return objectiveCards.removeFirst();
+	}
 	
 	@Override
 	public String toString() {
