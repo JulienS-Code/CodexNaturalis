@@ -32,7 +32,7 @@ public record CursorCard() implements Card {
         return recto;
     }
     
-    public void draw(Graphics2D g2d, double x, double y, double scale) {
+    public static void draw(Graphics2D g2d, double x, double y, double scale) {
         int width = (int) (120 * scale);
         int height = (int) (80 * scale);
         g2d.setColor(new Color(255, 255, 0, 102));
