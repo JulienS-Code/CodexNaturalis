@@ -105,7 +105,7 @@ public class Game {
 							break;
 						
 						// Ajout de cartes
-						case "A":
+						case "SPACE":
 							if (board.add(currentCard, cursorX, cursorY)) {
 								currentCard = deck.pickResourceCard();
 							}
