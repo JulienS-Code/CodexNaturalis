@@ -14,13 +14,11 @@ public class Grid {
     private Map<Point, Card> grid;
     private List<Point> order;  // Pour stocker l'ordre d'insertion
     private Point cursorPoint; // Pour stocker le curseur
-    private CursorCard cursorCard;
 
     public Grid() {
         grid = new HashMap<>();
         order = new ArrayList<>();
         cursorPoint = null;
-        cursorCard = new CursorCard();
     }
     
     public void setCursor(int x, int y) {
@@ -104,9 +102,5 @@ public class Grid {
     
     public Point getCursorPoint() {
     	return cursorPoint;
-    }
-    
-    public CursorCard getCursorCard() {
-    	return cursorCard;
     }
 }
