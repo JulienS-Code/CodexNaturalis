@@ -190,16 +190,26 @@ public class Board {
 			return false;
 		} // pas de carte voisine
 		
+		boolean hasInvisible = false;
+		boolean hasOther = false;
 		
 		for (CornerType corner : corners) {
 			if (corner instanceof OtherCornerType) {
 				if ((OtherCornerType) corner == OtherCornerType.Invisible) {
-					return false; // invisible = coin non jouable
+					hasInvisible = true;
+				} else {
+					hasOther = true;
 				}
+			} else {
+				hasOther = true;
 			}
 		}
-
-		return true;
+		
+		if (hasInvisible) {
+			return hasInvisible && hasOther;
+		} else {
+			return hasOther;
+		}
 	}
 	
 	
@@ -273,20 +283,20 @@ public class Board {
 	            case -1:
 	                switch (yOffset) {
 	                    case -1:
-	                        corners.add(card.getRecto()[0]);
+	                        corners.add(card.getRecto()[3]);
 	                        break;
 	                    case 1:
-	                        corners.add(card.getRecto()[2]);
+	                        corners.add(card.getRecto()[1]);
 	                        break;
 	                }
 	                break;
 	            case 1:
 	                switch (yOffset) {
 	                    case -1:
-	                        corners.add(card.getRecto()[1]);
+	                        corners.add(card.getRecto()[2]);
 	                        break;
 	                    case 1:
-	                        corners.add(card.getRecto()[3]);
+	                        corners.add(card.getRecto()[0]);
 	                        break;
 	                }
 	                break;
