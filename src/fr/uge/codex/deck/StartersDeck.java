@@ -1,8 +1,5 @@
 package fr.uge.codex.deck;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,8 +12,7 @@ import fr.uge.codex.deck.card.ResourceType;
 import fr.uge.codex.deck.card.StarterCard;
 
 public class StartersDeck {
-	List<StarterCard> starterCards = new ArrayList<StarterCard>();
-	private final String file;
+	List<StarterCard> starterCards;
 	
 	public void add(StarterCard card) {
 		Objects.requireNonNull(card);
@@ -28,29 +24,16 @@ public class StartersDeck {
 		starterCards.remove(card);
 	}
 	
-	public StartersDeck(String file) throws IOException {
-		this.file = Objects.requireNonNull(file);
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				createCardFromLine(line);
-			}
-		}
+	public StartersDeck()  {
+		this.starterCards = new ArrayList<StarterCard>();
 	}
 	
-	public void createCardFromLine(String line) {
-		Objects.requireNonNull(line);
-		String type = "StarterCard";
-		String[] parsedLine = line.split(" ");
-		String currentType = parsedLine[0];
-		if (type.equals(currentType)) {
-			starterCards.add(makeCardFromLine(line));
-		}
+	public void createCardFromLine(String[] parsedLine) {
+		Objects.requireNonNull(parsedLine);
+		starterCards.add(makeCardFromLine(parsedLine));
 	}
 	
-	public StarterCard makeCardFromLine(String line) {
-		Objects.requireNonNull(line);
-		String[] parsedLine = line.split(" ");
+	private StarterCard makeCardFromLine(String[] parsedLine) {
 		
 		List<ResourceType> recto = new ArrayList<ResourceType>();
 		for (int i = 2; i <= 5; i++) {

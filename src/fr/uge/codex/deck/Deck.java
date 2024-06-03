@@ -1,5 +1,7 @@
 package fr.uge.codex.deck;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 import fr.uge.codex.deck.card.GoldCard;
@@ -15,13 +17,23 @@ public class Deck {
 	private StartersDeck startersDeck;
 	
 	public Deck() {
-		try {
-			startersDeck = new StartersDeck(file);
-			resourcesDeck = new ResourcesDeck(file);
-			goldsDeck = new GoldsDeck(file);
-			objectivesDeck = new ObjectivesDeck(file);
+		startersDeck = new StartersDeck();
+		resourcesDeck = new ResourcesDeck();
+		goldsDeck = new GoldsDeck();
+		objectivesDeck = new ObjectivesDeck();
+		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] parsedLine = line.split(" ");
+				switch (parsedLine[0]) {
+					case "StarterCard" -> startersDeck.createCardFromLine(parsedLine);
+					case "ResourceCard" -> resourcesDeck.createCardFromLine(parsedLine);
+					case "GoldCard" -> goldsDeck.createCardFromLine(parsedLine);
+					case "Objective" -> objectivesDeck.createCardFromLine(parsedLine);
+				}
+			}
 			shuffleDeck();
-			
+				
 		} catch (IOException e) {
 			System.err.println("Erreur lors de la création des decks : " + e.getMessage());
 			startersDeck = null;

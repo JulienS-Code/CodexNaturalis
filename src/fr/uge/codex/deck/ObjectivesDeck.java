@@ -1,8 +1,5 @@
 package fr.uge.codex.deck;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,32 +16,18 @@ import fr.uge.codex.deck.card.ResourceType;
 import fr.uge.codex.deck.card.Scoring;
 
 public class ObjectivesDeck {
-	List<ObjectiveCard> objectiveCards = new ArrayList<ObjectiveCard>();
-	private final String file;
+	List<ObjectiveCard> objectiveCards;
 	
-	public ObjectivesDeck(String file) throws IOException {
-		this.file = Objects.requireNonNull(file);
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				createCardFromLine(line);
-			}
-		} 
+	public ObjectivesDeck() {
+		this.objectiveCards = new ArrayList<ObjectiveCard>();
 	}
 	
-	public void createCardFromLine(String line) {
-		Objects.requireNonNull(line);
-		String type = "Objective";
-		String[] parsedLine = line.split(" ");
-		String currentType = parsedLine[0];
-		if (type.equals(currentType)) {
-			objectiveCards.add(makeCardFromLine(line));
-		}
+	public void createCardFromLine(String[] parsedLine) {
+		Objects.requireNonNull(parsedLine);
+		objectiveCards.add(makeCardFromLine(parsedLine));
 	}
 	
-	public ObjectiveCard makeCardFromLine(String line) {
-		Objects.requireNonNull(line);
-		String[] parsedLine = line.split(" ");
+	public ObjectiveCard makeCardFromLine(String[] parsedLine) {
 		
 		String currentType = parsedLine[1];
 		List<CornerType> criteria = new ArrayList<CornerType>();
