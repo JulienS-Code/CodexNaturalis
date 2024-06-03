@@ -8,21 +8,43 @@ import java.util.Map;
 import java.util.Set;
 
 import fr.uge.codex.deck.card.Card;
+import fr.uge.codex.deck.card.GhostCard;
 
 public class Grid {
     private Map<Point, Card> grid;
     private List<Point> order;  // Pour stocker l'ordre d'insertion
+    private Point ghostPoint; // Pour stocker le curseur
+    private GhostCard ghostCard;
 
     public Grid() {
         grid = new HashMap<>();
         order = new ArrayList<>();
+        ghostPoint = null;
+        ghostCard = new GhostCard();
+    }
+    
+    public void setGhost(int x, int y) {
+    	add(x, y, new GhostCard());
+    }
+    
+    public void removeGhost() {
+    	ghostPoint = null;
     }
 
     public boolean add(int x, int y, Card card) {
         Point point = new Point(x, y);
+        
+        if (card instanceof GhostCard) {
+            ghostPoint = point;
+            return true;
+        }
+        // Si l'on ajoute une vraie carte le curseur n'est plus nécessaire
+        ghostPoint = null;
+        
         if (grid.containsKey(point)) {
             return false; // emplacement déjà pris
         }
+        
         grid.put(point, card);
         order.add(point);
         return true;
@@ -78,5 +100,13 @@ public class Grid {
     
     public List<Point> getOrder() {
         return order;
+    }
+    
+    public Point getGhostPoint() {
+    	return ghostPoint;
+    }
+    
+    public GhostCard getGhostCard() {
+    	return ghostCard;
     }
 }
