@@ -79,9 +79,6 @@ public class Game {
 							return;
 						
 						// Zoom
-						case "I":
-							board.zoomReset();
-							break;
 						case "O":
 							board.zoomOut();
 							break;
@@ -104,6 +101,10 @@ public class Game {
 							break;
 						case "R":
 							board.moveReset();
+							board.zoomReset();
+							currentX = 0;
+							currentY = 0;
+							board.setGhost(currentX, currentY);
 							break;
 						
 						// Ajout de cartes
