@@ -95,7 +95,7 @@ public class Board {
 
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
-
+        
         for (Point point : grid.keys()) {
             if (point.x < minX) minX = point.x;
             if (point.x > maxX) maxX = point.x;
@@ -103,8 +103,8 @@ public class Board {
             if (point.y > maxY) maxY = point.y;
         }
 
-        int scaledOffsetX = (int) ((120 - 26) * scale);
-        int scaledOffsetY = (int) ((80 - 32) * scale);
+        int scaledOffsetX = (int) ((120 - 24) * scale);
+        int scaledOffsetY = (int) ((80 - 30) * scale);
 
         int offsetX = (width) / 2 - (scaledOffsetX);
         int offsetY = (height) / 2 - (scaledOffsetY);
@@ -125,10 +125,9 @@ public class Board {
         
         Point point = grid.getCursorPoint();
         if (point != null) {
-        	CursorCard cursorCard = grid.getCursorCard();
             int displayX = point.x * scaledOffsetX + offsetX + Xoffset;
             int displayY = point.y * scaledOffsetY + offsetY + Yoffset;
-            cursorCard.draw(g2d, displayX, displayY, scale);
+            CursorCard.draw(g2d, displayX, displayY, scale);
         }
     }
     
@@ -177,39 +176,25 @@ public class Board {
 		var corners = new ArrayList<CornerType>();
 		
 		//TODO: Vérifier si la carte est retournée, si oui on prend son verso
-		
-
 		if (hasNeighbors(x, y)) {
 			return false;
 		}
-		
 
 		corners.addAll(checkDiagonals(x, y));
 		
 		if (corners.isEmpty()) {
 			return false;
-		} // pas de carte voisine
-		
-		boolean hasInvisible = false;
-		boolean hasOther = false;
+		} // pas de carte voisin
 		
 		for (CornerType corner : corners) {
 			if (corner instanceof OtherCornerType) {
 				if ((OtherCornerType) corner == OtherCornerType.Invisible) {
-					hasInvisible = true;
-				} else {
-					hasOther = true;
+					return false;
 				}
-			} else {
-				hasOther = true;
 			}
 		}
 		
-		if (hasInvisible) {
-			return hasInvisible && hasOther;
-		} else {
-			return hasOther;
-		}
+		return true;
 	}
 	
 	
