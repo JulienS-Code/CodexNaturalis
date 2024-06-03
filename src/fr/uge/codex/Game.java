@@ -5,7 +5,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 import fr.uge.codex.deck.Deck;
+import fr.uge.codex.deck.card.Card;
+import fr.uge.codex.deck.card.GoldCard;
 import fr.uge.codex.deck.card.ResourceCard;
+import fr.uge.codex.player.Inventary;
 import fr.uge.memory.SimpleGameData;
 import fr.uge.memory.SimpleGameView;
 
@@ -34,7 +37,7 @@ public class Game {
 		Deck deck = new Deck();
 		System.out.println(deck);
         ResourceCard card = deck.pickResourceCard();
-        System.out.println(card);
+        Inventary inventary = new Inventary();
 		
         Application.run(Color.BLACK, context -> {
         	Menu.renderMenu(context);
@@ -52,7 +55,7 @@ public class Game {
         	
             int cursorX = 0;
             int cursorY = 0;
-            ResourceCard currentCard = deck.pickResourceCard();
+            Card currentCard = (Card) deck.pickResourceCard();
             board.setCursor(cursorX, cursorY);
             
             while (true) {
@@ -107,6 +110,7 @@ public class Game {
 						// Ajout de cartes
 						case "SPACE":
 							if (board.add(currentCard, cursorX, cursorY)) {
+								Inventary.addCardToInventary(inventary, currentCard);
 								currentCard = deck.pickResourceCard();
 							}
 							break;
