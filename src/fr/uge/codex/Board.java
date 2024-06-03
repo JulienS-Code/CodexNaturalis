@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import fr.uge.codex.deck.card.Card;
 import fr.uge.codex.deck.card.CornerType;
-import fr.uge.codex.deck.card.GhostCard;
+import fr.uge.codex.deck.card.CursorCard;
 import fr.uge.codex.deck.card.GoldCard;
 import fr.uge.codex.deck.card.OtherCornerType;
 import fr.uge.codex.deck.card.ResourceCard;
@@ -42,8 +42,8 @@ public class Board {
 		Objects.requireNonNull(card);
 	
 
-		if (card instanceof GhostCard) {
-			grid.add(x, y, card); // Elle s'ajoute à grid.ghostCards
+		if (card instanceof CursorCard) {
+			grid.add(x, y, card); // Elle s'ajoute à grid.cursorCards
 		}
 		
 		if (grid.get(x, y) != null) {
@@ -103,7 +103,7 @@ public class Board {
             if (point.y > maxY) maxY = point.y;
         }
 
-        int scaledOffsetX = (int) ((120 - 24) * scale);
+        int scaledOffsetX = (int) ((120 - 26) * scale);
         int scaledOffsetY = (int) ((80 - 32) * scale);
 
         int offsetX = (width) / 2 - (scaledOffsetX);
@@ -123,12 +123,12 @@ public class Board {
             } // TODO: polymorphisme pour Card.draw()
         }
         
-        Point point = grid.getGhostPoint();
+        Point point = grid.getCursorPoint();
         if (point != null) {
-        	GhostCard ghostCard = grid.getGhostCard();
+        	CursorCard cursorCard = grid.getCursorCard();
             int displayX = point.x * scaledOffsetX + offsetX + Xoffset;
             int displayY = point.y * scaledOffsetY + offsetY + Yoffset;
-            ghostCard.draw(g2d, displayX, displayY, scale);
+            cursorCard.draw(g2d, displayX, displayY, scale);
         }
     }
     
@@ -306,13 +306,13 @@ public class Board {
 		return corners;
 	}
 	
-	public void setGhost(int x, int y) {
-		grid.setGhost(x, y);
+	public void setCursor(int x, int y) {
+		grid.setCursor(x, y);
 		needsReset = true;
 	}
 	
-	public void removeGhost() {
-		grid.removeGhost();
+	public void removeCursor() {
+		grid.removeCursor();
 		needsReset = true;
 	}
 }
