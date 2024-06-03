@@ -13,7 +13,6 @@ import fr.umlv.zen5.Application;
 import fr.umlv.zen5.ApplicationContext;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.Event.Action;
-import fr.umlv.zen5.KeyboardKey;
 
 public class Game {
 	
@@ -34,12 +33,13 @@ public class Game {
 	public static void main(String[] args) {
 		Deck deck = new Deck();
 		System.out.println(deck);
-        ResourceCard card = deck.getFirstCard();
+        ResourceCard card = deck.pickResourceCard();
+        System.out.println(card);
 		
         Application.run(Color.BLACK, context -> {
         	Menu.renderMenu(context);
         	Board board = new Board(context);
-			board.add(card, 0, 0);
+			board.add(card, 0, 0, true);
 			board.add(card, 1, 0);
 			board.add(card, 2, 1);
 			board.add(card, 1, 1);
@@ -53,6 +53,11 @@ public class Game {
                 );
             }); // On efface le menu
         	
+        	// DEBUG: Pour placer des cartes avec le clavier
+            int currentX = 0;
+            int currentY = 0;
+            ResourceCard currentCard = deck.pickResourceCard();
+            
             while (true) {
                 context.renderFrame(graphics -> {
                     Graphics2D g2d = (Graphics2D) graphics;
@@ -68,20 +73,20 @@ public class Game {
 				
 				if (event.getAction() == Action.KEY_PRESSED) {
 					switch (event.getKey().toString()) {
-						// Quitter
-						case "Q":
+						// Quitter (ECHAP ou autre)
+						case "UNDEFINED":
 							context.exit(0);
 							return;
 						
 						// Zoom
 						case "I":
-							board.zoomIn();
+							board.zoomReset();
 							break;
 						case "O":
 							board.zoomOut();
 							break;
 						case "P":
-							board.zoomReset();
+							board.zoomIn();
 							break;
 						
 						// Mouvement du plateau
@@ -100,7 +105,34 @@ public class Game {
 						case "R":
 							board.moveReset();
 							break;
-                        
+						
+						// Ajout de cartes
+						case "A":
+							if (board.add(currentCard, currentX, currentY)) {
+								currentCard = deck.pickResourceCard();
+								board.removeGhost();
+							}
+							break;
+							
+						//   U         Z
+						// H J K  =  Q S D
+						case "Z":
+							currentY--;
+							board.setGhost(currentX, currentY);
+							break;
+						case "Q":
+							currentX--;
+							board.setGhost(currentX, currentY);
+							break;
+						case "S":
+							currentY++;
+							board.setGhost(currentX, currentY);
+							break;
+						case "D":
+							currentX++;
+							board.setGhost(currentX, currentY);
+							break;
+							
 						// DEBUG
 						default:
 							System.out.println(event.getKey().toString());
