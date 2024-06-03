@@ -1,6 +1,8 @@
 package fr.uge.codex.deck.card;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
@@ -48,12 +50,21 @@ public record ResourceCard(CornerType[] recto, ResourceType kingdom, Scoring sco
     }
 
     public void drawBase(Graphics2D g2d, double x, double y, double scale) {
-        // Taille de carte par défaut : 120x78
+    	Objects.requireNonNull(g2d);
         BufferedImage img = ImageLoader.get(kingdom, true);
-        ImageLoader.draw(g2d, (int) x, (int) y, img, scale);
+        int width = (int) (img.getWidth() * scale);
+        int height = (int) (img.getHeight() * scale);
+        RoundRectangle2D outerRect = new RoundRectangle2D.Double(x, y, width, height, 5 * scale, 5 * scale);
+        g2d.setColor(Color.BLACK);
+        g2d.fill(outerRect);
+        RoundRectangle2D innerRect = new RoundRectangle2D.Double(x + 1, y + 1, width - 2, height - 2, 5 * scale, 5 * scale);
+        g2d.clip(innerRect);
+        g2d.drawImage(img, (int) x, (int) y, width, height, null);
+        g2d.setClip(null);
     }
 
     public void draw(Graphics2D g2d, double x, double y, double scale) {
+    	Objects.requireNonNull(g2d);
         drawBase(g2d, x, y, scale);
         drawCorners(g2d, x, y, scale);
     }
