@@ -1,6 +1,6 @@
 StarterCard Recto R:Insect R:Fungi R:Plant R:Animal Verso Empty Empty Invisible Invisible Resources R:Animal R:Insect R:Plant
 StarterCard Recto R:Plant R:Insect R:Animal R:Fungi Verso Empty Empty Empty Empty Resources R:Animal R:Insect
-StarterCard Recto R:Fungi R:Animal R:Plant R:Insect Verso Empty Empty Invisible Inivsible Resources R:Plant R:Animal R:Fungi
+StarterCard Recto R:Fungi R:Animal R:Plant R:Insect Verso Empty Empty Invisible Invisible Resources R:Plant R:Animal R:Fungi
 StarterCard Recto R:Insect R:Animal R:Fungi R:Plant Verso Empty Empty Empty Empty Resouces R:Plant R:Fungi
 StarterCard Recto R:Plant R:Animal R:Fungi R:Insect Verso R:Animal Empty Empty R:Fungi Resources R:Fungi
 StarterCard Recto R:Fungi R:Plant R:Insect R:Animal Verso Empty R:Plant R:Insect Empty Resources R:Insect
