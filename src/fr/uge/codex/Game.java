@@ -40,9 +40,6 @@ public class Game {
         	Menu.renderMenu(context);
         	Board board = new Board(context);
 			board.add(card, 0, 0, true);
-			board.add(card, 1, 0);
-			board.add(card, 2, 1);
-			board.add(card, 1, 1);
 			
         	context.renderFrame(graphics -> {
                 Graphics2D g2d = (Graphics2D) graphics;
@@ -53,10 +50,10 @@ public class Game {
                 );
             }); // On efface le menu
         	
-        	// DEBUG: Pour placer des cartes avec le clavier
-            int currentX = 0;
-            int currentY = 0;
+            int cursorX = 0;
+            int cursorY = 0;
             ResourceCard currentCard = deck.pickResourceCard();
+            board.setCursor(cursorX, cursorY);
             
             while (true) {
                 context.renderFrame(graphics -> {
@@ -102,36 +99,35 @@ public class Game {
 						case "R":
 							board.moveReset();
 							board.zoomReset();
-							currentX = 0;
-							currentY = 0;
-							board.setGhost(currentX, currentY);
+							cursorX = 0;
+							cursorY = 0;
+							board.setCursor(cursorX, cursorY);
 							break;
 						
 						// Ajout de cartes
 						case "A":
-							if (board.add(currentCard, currentX, currentY)) {
+							if (board.add(currentCard, cursorX, cursorY)) {
 								currentCard = deck.pickResourceCard();
-								board.removeGhost();
 							}
 							break;
 							
-						//   U         Z
-						// H J K  =  Q S D
+						//   Z
+						// Q S D
 						case "Z":
-							currentY--;
-							board.setGhost(currentX, currentY);
+							cursorY--;
+							board.setCursor(cursorX, cursorY);
 							break;
 						case "Q":
-							currentX--;
-							board.setGhost(currentX, currentY);
+							cursorX--;
+							board.setCursor(cursorX, cursorY);
 							break;
 						case "S":
-							currentY++;
-							board.setGhost(currentX, currentY);
+							cursorY++;
+							board.setCursor(cursorX, cursorY);
 							break;
 						case "D":
-							currentX++;
-							board.setGhost(currentX, currentY);
+							cursorX++;
+							board.setCursor(cursorX, cursorY);
 							break;
 							
 						// DEBUG
