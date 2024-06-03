@@ -8,38 +8,38 @@ import java.util.Map;
 import java.util.Set;
 
 import fr.uge.codex.deck.card.Card;
-import fr.uge.codex.deck.card.GhostCard;
+import fr.uge.codex.deck.card.CursorCard;
 
 public class Grid {
     private Map<Point, Card> grid;
     private List<Point> order;  // Pour stocker l'ordre d'insertion
-    private Point ghostPoint; // Pour stocker le curseur
-    private GhostCard ghostCard;
+    private Point cursorPoint; // Pour stocker le curseur
+    private CursorCard cursorCard;
 
     public Grid() {
         grid = new HashMap<>();
         order = new ArrayList<>();
-        ghostPoint = null;
-        ghostCard = new GhostCard();
+        cursorPoint = null;
+        cursorCard = new CursorCard();
     }
     
-    public void setGhost(int x, int y) {
-    	add(x, y, new GhostCard());
+    public void setCursor(int x, int y) {
+    	add(x, y, new CursorCard());
     }
     
-    public void removeGhost() {
-    	ghostPoint = null;
+    public void removeCursor() {
+    	cursorPoint = null;
     }
 
     public boolean add(int x, int y, Card card) {
         Point point = new Point(x, y);
         
-        if (card instanceof GhostCard) {
-            ghostPoint = point;
+        if (card instanceof CursorCard) {
+            cursorPoint = point;
             return true;
         }
         // Si l'on ajoute une vraie carte le curseur n'est plus nécessaire
-        ghostPoint = null;
+        cursorPoint = null;
         
         if (grid.containsKey(point)) {
             return false; // emplacement déjà pris
@@ -102,11 +102,11 @@ public class Grid {
         return order;
     }
     
-    public Point getGhostPoint() {
-    	return ghostPoint;
+    public Point getCursorPoint() {
+    	return cursorPoint;
     }
     
-    public GhostCard getGhostCard() {
-    	return ghostCard;
+    public CursorCard getCursorCard() {
+    	return cursorCard;
     }
 }
