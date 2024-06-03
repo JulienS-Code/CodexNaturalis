@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import fr.uge.codex.deck.card.Card;
 import fr.uge.codex.deck.card.CornerType;
+import fr.uge.codex.deck.card.GhostCard;
 import fr.uge.codex.deck.card.GoldCard;
 import fr.uge.codex.deck.card.OtherCornerType;
 import fr.uge.codex.deck.card.ResourceCard;
@@ -39,6 +40,11 @@ public class Board {
 	
 	public boolean add(Card card, int x, int y, boolean isStarter) {
 		Objects.requireNonNull(card);
+	
+
+		if (card instanceof GhostCard) {
+			grid.add(x, y, card); // Elle s'ajoute à grid.ghostCards
+		}
 		
 		if (grid.get(x, y) != null) {
 			System.out.println("DEBUG: La case ("+x+","+y+") est déjà occupée");
@@ -100,10 +106,8 @@ public class Board {
         int scaledOffsetX = (int) ((120 - 24) * scale);
         int scaledOffsetY = (int) ((80 - 32) * scale);
 
-        int gridWidth = (maxX - minX + 1) * scaledOffsetX;
-        int gridHeight = (maxY - minY + 1) * scaledOffsetY;
-        int offsetX = (width - gridWidth) / 2 - (minX * scaledOffsetX);
-        int offsetY = (height - gridHeight) / 2 - (minY * scaledOffsetY);
+        int offsetX = (width) / 2 - (scaledOffsetX);
+        int offsetY = (height) / 2 - (scaledOffsetY);
         
         // on affiche les cartes les plus récentes au dessus
         List<Point> order = grid.getOrder(); 
@@ -117,6 +121,14 @@ public class Board {
             } else if (card instanceof GoldCard) {
                 ((GoldCard) card).draw(g2d, displayX, displayY, scale);
             } // TODO: polymorphisme pour Card.draw()
+        }
+        
+        Point point = grid.getGhostPoint();
+        if (point != null) {
+        	GhostCard ghostCard = grid.getGhostCard();
+            int displayX = point.x * scaledOffsetX + offsetX + Xoffset;
+            int displayY = point.y * scaledOffsetY + offsetY + Yoffset;
+            ghostCard.draw(g2d, displayX, displayY, scale);
         }
     }
     
@@ -166,8 +178,11 @@ public class Board {
 		
 		//TODO: Vérifier si la carte est retournée, si oui on prend son verso
 		
+
+		if (hasNeighbors(x, y)) {
+			return false;
+		}
 		
-		corners.addAll(checkNeighbors(x, y));
 
 		corners.addAll(checkDiagonals(x, y));
 		
@@ -206,11 +221,10 @@ public class Board {
 		return diagonals;
 	}
 	
-	private List<CornerType> checkNeighbors(int x, int y) {
+	private boolean hasNeighbors(int x, int y) {
 		
 		List<Point> neighbors = getNeighbors(x, y);
 		
-		var corners = new ArrayList<CornerType>();
 		for (Point point : neighbors) {
 	        Card card = grid.get(point);
 	        
@@ -223,28 +237,20 @@ public class Board {
 
 	        switch (xOffset) {
 	            case -1: // Gauche
-	                corners.add(card.getRecto()[1]);
-	                corners.add(card.getRecto()[3]);
-	                break;
+	                return true;
 	            case 1: // Droite
-	                corners.add(card.getRecto()[0]);
-	                corners.add(card.getRecto()[2]);
-	                break;
+	                return true;
 	            default: // même x donc haut ou bas
 	                switch (yOffset) {
 	                    case -1: // Haut
-	                        corners.add(card.getRecto()[2]);
-	                        corners.add(card.getRecto()[3]);
-	                        break;
+	                        return true;
 	                    case 1: // Bas
-	                        corners.add(card.getRecto()[0]);
-	                        corners.add(card.getRecto()[1]);
-	                        break;
+	                        return true;
 	                }
 	                break;
 	        }
 	    }
-		return corners;
+		return false;
 	}
 	
 	
@@ -288,5 +294,15 @@ public class Board {
 	    }
 		
 		return corners;
+	}
+	
+	public void setGhost(int x, int y) {
+		grid.setGhost(x, y);
+		needsReset = true;
+	}
+	
+	public void removeGhost() {
+		grid.removeGhost();
+		needsReset = true;
 	}
 }
