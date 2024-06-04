@@ -1,8 +1,6 @@
 package fr.uge.codex.player;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
-
 import fr.uge.codex.deck.card.ArtifactType;
 import fr.uge.codex.deck.card.Card;
 import fr.uge.codex.deck.card.CornerType;
@@ -41,11 +39,12 @@ public class Inventory {
         animal += nb;
     }
 
-    public void removeNbAnimal(int nb) {
+    public boolean removeNbAnimal(int nb) {
         if (animal - nb < 0) {
-            throw new NoSuchElementException("Missing resource Animal");
+            return false;
         }
         animal -= nb;
+        return true;
     }
 
     // Plant
@@ -57,11 +56,12 @@ public class Inventory {
         plant += nb;
     }
 
-    public void removeNbPlant(int nb) {
+    public boolean removeNbPlant(int nb) {
         if (plant - nb < 0) {
-            throw new NoSuchElementException("Missing resource Plant");
+            return false;
         }
         plant -= nb;
+        return true;
     }
 
     // Fungi
@@ -73,11 +73,12 @@ public class Inventory {
         fungi += nb;
     }
 
-    public void removeNbFungi(int nb) {
+    public boolean removeNbFungi(int nb) {
         if (fungi - nb < 0) {
-            throw new NoSuchElementException("Missing resource Fungi");
+            return false;
         }
         fungi -= nb;
+        return true;
     }
 
     // Insect
@@ -89,11 +90,12 @@ public class Inventory {
         insect += nb;
     }
 
-    public void removeNbInsect(int nb) {
+    public boolean removeNbInsect(int nb) {
         if (insect - nb < 0) {
-            throw new NoSuchElementException("Missing resource Insect");
+            return false;
         }
         insect -= nb;
+        return true;
     }
 
     // Quill
@@ -105,11 +107,12 @@ public class Inventory {
         quill += nb;
     }
 
-    public void removeNbQuill(int nb) {
+    public boolean removeNbQuill(int nb) {
         if (quill - nb < 0) {
-            throw new NoSuchElementException("Missing artifact Quill");
+            return false;
         }
         quill -= nb;
+        return true;
     }
 
     // Manuscript
@@ -121,11 +124,12 @@ public class Inventory {
         manuscript += nb;
     }
 
-    public void removeNbManuscript(int nb) {
+    public boolean removeNbManuscript(int nb) {
         if (manuscript - nb < 0) {
-            throw new NoSuchElementException("Missing artifact Manuscript");
+            return false;
         }
         manuscript -= nb;
+        return true;
     }
 
     // Inkwell
@@ -137,11 +141,12 @@ public class Inventory {
         inkwell += nb;
     }
 
-    public void removeNbInkwell(int nb) {
+    public boolean removeNbInkwell(int nb) {
         if (inkwell - nb < 0) {
-            throw new NoSuchElementException("Missing artifact Inkwell");
+            return false;
         }
         inkwell -= nb;
+        return true;
     }
 
     // Score
@@ -184,7 +189,10 @@ public class Inventory {
                 score += goldCard.score().points();
                 // Soustraire les ressources de cost
                 for (CornerType cost : goldCard.cost()) {
-                    removeResource(cost, 1);
+                    if (!removeResource(cost, 1)) {
+                        System.out.println("Not enough resources to cover cost");
+                        // Handle the insufficient resource case, e.g., by rolling back changes or other logic
+                    }
                 }
             }
         }
@@ -222,31 +230,48 @@ public class Inventory {
     }
 
     // Suppression de tout type de corner
-    private void removeResource(CornerType corner, int count) {
+    private boolean removeResource(CornerType corner, int count) {
         if (corner instanceof ResourceType) {
-            removeResource((ResourceType) corner, count);
+            return removeResource((ResourceType) corner, count);
         } else if (corner instanceof ArtifactType) {
-            removeResource((ArtifactType) corner, count);
+            return removeResource((ArtifactType) corner, count);
         }
+        return false;
     }
 
     // Suppression de ressource (Plant, Animal, Insect, Fungi)
-    private void removeResource(ResourceType resource, int count) {
+    private boolean removeResource(ResourceType resource, int count) {
         switch (resource) {
-            case Animal -> removeNbAnimal(count);
-            case Plant -> removeNbPlant(count);
-            case Fungi -> removeNbFungi(count);
-            case Insect -> removeNbInsect(count);
+            case Animal -> {
+                return removeNbAnimal(count);
+            }
+            case Plant -> {
+                return removeNbPlant(count);
+            }
+            case Fungi -> {
+                return removeNbFungi(count);
+            }
+            case Insect -> {
+                return removeNbInsect(count);
+            }
         }
+        return false;
     }
 
     // Suppression d'artifact (Inkwell, Manuscript, Quill)
-    private void removeResource(ArtifactType artifact, int count) {
+    private boolean removeResource(ArtifactType artifact, int count) {
         switch (artifact) {
-            case Quill -> removeNbQuill(count);
-            case Manuscript -> removeNbManuscript(count);
-            case Inkwell -> removeNbInkwell(count);
+            case Quill -> {
+                return removeNbQuill(count);
+            }
+            case Manuscript -> {
+                return removeNbManuscript(count);
+            }
+            case Inkwell -> {
+                return removeNbInkwell(count);
+            }
         }
+        return false;
     }
 
     // Score
@@ -257,20 +282,17 @@ public class Inventory {
          * Q / I / M -> nbArtefactZoneDeJeu + ArtefactSurCard 
         */
         switch (scoring.scoringType()){
-            case DIRECT:
-                score += scoring.points();
-            case BY_ARTIFACT:
+            case DIRECT -> score += scoring.points();
+            case BY_ARTIFACT -> {
                 switch (scoring.artifactType()) {
-                    case Inkwell:
-                    case Manuscript:
-                    case Quill:
+                    case Inkwell, Manuscript, Quill -> {
                         addNbQuill(1);
-                        score += scoring.points() /*  * nbArtefact(zone+card)  */ ;
+                        score += scoring.points(); /*  * nbArtefact(zone+card)  */
+                    }
                 }
-            case BY_CORNER:
-            case NONE:
-            default:
-                
+            }
+            case BY_CORNER, NONE -> {}
+            default -> {}
         }
     }
 
