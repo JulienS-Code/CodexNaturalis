@@ -31,7 +31,7 @@ public class Inventory {
         this.manuscript = 0;
         this.inkwell = 0;
     }
-
+    
     // Animal
     public int animal() {
         return animal;

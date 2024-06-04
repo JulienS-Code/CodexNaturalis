@@ -41,6 +41,10 @@ public class Player {
 	}
 	
 	public boolean pick(int index, Deck deck) {
+		Objects.requireNonNull(deck);
+		if (index < 0 || index >= drawPile.size()) {
+			return false;
+		}
 		return pick(drawPile.get(index), deck);
 	}
 	
@@ -52,17 +56,17 @@ public class Player {
 			return false;
 		}
 		
-		if (!drawPile.contains(card)) {
+		int index = drawPile.indexOf(card);
+		if (index == -1) {
 			return false;
 		}
 		
 		hand.add(card);
-		drawPile.remove(card);
 		
 		if (card instanceof ResourceCard) {
-			drawPile.add(deck.pickResourceCard());
+			drawPile.set(index, deck.pickResourceCard());
 		} else if (card instanceof GoldCard) {
-			drawPile.add(deck.pickGoldCard());
+			drawPile.set(index, deck.pickGoldCard());
 		}
 
 		return true;
@@ -74,7 +78,6 @@ public class Player {
 	}
 	
 	public void drawHand(Graphics2D g2d, double width, double height) {
-		// Draw the cards at the bottom of the screen, from left to right
 		Objects.requireNonNull(g2d);
 		
 		if (hand.size() == 0) {
@@ -112,7 +115,7 @@ public class Player {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Player ");
 		builder.append(id);
-		builder.append(" qui a ");
+		builder.append(" : ");
 		builder.append(inventory.score());
 		builder.append(" points ");
 		return builder.toString();

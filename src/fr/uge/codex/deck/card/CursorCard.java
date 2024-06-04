@@ -45,14 +45,14 @@ public record CursorCard() implements Card {
     }
     
     public static void drawCursor(Graphics2D g2d, double x, double y, double scale) {
-        int width = (int) (120+2 * scale);
-        int height = (int) (80+2 * scale);
+        int width = (int) (120 * scale);
+        int height = (int) (80 * scale);
         g2d.setColor(new Color(255, 255, 0, 102));
-        g2d.drawRect((int) x-1, (int) y-1, width, height);
+        g2d.drawRect((int) x-1, (int) y-1, width + 2, height + 2);
     }
 
     @Override
     public String toString() {
-        return "GhostCard()";
+        return "CursorCard{}";
     }
 }
