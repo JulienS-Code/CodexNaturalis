@@ -35,6 +35,11 @@ public record ResourceCard(CornerType[] recto, ResourceType kingdom, Scoring sco
         return recto;
     }
     
+	@Override
+	public CornerType[] getVerso() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
+    
     @Override
     public ResourceType getKingdom() {
     	return kingdom;
