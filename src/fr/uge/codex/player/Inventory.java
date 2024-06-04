@@ -1,5 +1,8 @@
 package fr.uge.codex.player;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.Objects;
 import fr.uge.codex.deck.card.ArtifactType;
 import fr.uge.codex.deck.card.Card;
@@ -221,7 +224,7 @@ public class Inventory {
     }
 
     // Gestion de tout type de corner
-    private void addResource(CornerType corner, int count) {
+    public void addResource(CornerType corner, int count) {
         if (corner instanceof ResourceType) {
             addResource((ResourceType) corner, count);
         } else if (corner instanceof ArtifactType) {
@@ -230,7 +233,7 @@ public class Inventory {
     }
 
     // Suppression de tout type de corner
-    private boolean removeResource(CornerType corner, int count) {
+    public boolean removeResource(CornerType corner, int count) {
         if (corner instanceof ResourceType) {
             return removeResource((ResourceType) corner, count);
         } else if (corner instanceof ArtifactType) {
@@ -295,6 +298,12 @@ public class Inventory {
             default -> {}
         }
     }
+    
+    public void drawScore(Graphics g2d) {
+    	g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font("Arial", Font.BOLD, 26));
+		g2d.drawString("Score : " + String.valueOf(score), 400, 68); // changer valeurs
+    }    
 
     @Override
     public String toString() {

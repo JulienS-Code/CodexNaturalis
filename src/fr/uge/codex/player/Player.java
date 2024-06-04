@@ -40,6 +40,10 @@ public class Player {
 		return hand;
 	}
 	
+	public Inventory inventory() {
+		return inventory;
+	}
+	
 	public void addCardToInventory(Card card) {
 		inventory.updateInventory(card);
 	}
