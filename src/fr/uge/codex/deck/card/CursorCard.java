@@ -21,7 +21,7 @@ public record CursorCard() implements Card {
 	
     @Override
     public boolean turned() {
-        return turned();
+        return false;
     }
 
     @Override
@@ -49,6 +49,10 @@ public record CursorCard() implements Card {
         int height = (int) (80 * scale);
         g2d.setColor(new Color(255, 255, 0, 102));
         g2d.drawRect((int) x-1, (int) y-1, width + 2, height + 2);
+    }
+    
+    public void turn() {
+    	return;
     }
 
     @Override

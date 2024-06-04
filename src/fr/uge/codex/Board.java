@@ -1,8 +1,11 @@
 package fr.uge.codex;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -311,5 +314,13 @@ public class Board {
 		g2d.fillRect(width - 200, 0, 200, height);
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(width - 200, -1, 200, height+2);
+		
+		BufferedImage turnBtn = ImageLoader.imageFromPath(Paths.get("./data/img/icons/icon_turn.png"));
+		g2d.drawImage(turnBtn, width - 460, height - 100, null);
+		
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font("Arial", Font.BOLD, 26));
+		g2d.drawString("Retourner", width - 400, height - 68);
+		
 	}
 }

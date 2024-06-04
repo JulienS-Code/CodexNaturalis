@@ -93,7 +93,7 @@ public class Player {
 		
 		for (int i = 0; i < hand.size(); i++) {
 			Card card = hand.get(i);
-			card.draw(g2d, 830 + (200) * (i), 960, 1.4);
+			card.draw(g2d, 830 + (200) * (i), 950, 1.4);
 		}
 	}
 	
@@ -102,11 +102,21 @@ public class Player {
 		
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Arial", Font.BOLD, 26));
-		g2d.drawString("Pioche (cliquez pour piocher)", 220, (int) height - 150);
+		g2d.drawString("Pioche (cliquez pour piocher)", 220, (int) height - 160);
 		
 		for (int i = 0; i < drawPile.size(); i++) {
 			Card card = drawPile.get(i);
-			card.draw(g2d, 230 + (200) * (i), 960, 1.4);
+			card.draw(g2d, 230 + (200) * (i), 950, 1.4);
+		}
+	}
+	
+	public void turnCards() {
+		for (Card card : hand) {
+			card.turn();
+		}
+		
+		for (Card card : drawPile) {
+			card.turn();
 		}
 	}
 	

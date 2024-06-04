@@ -29,31 +29,30 @@ public class StarterCard implements Card {
         this.turned = false;
     }
     
-    
     public List<ResourceType> resources() {
-	    return resources;
+        return resources;
     }
     
-	@Override
-	public boolean turned() {
-		return turned;
-	}
+    @Override
+    public boolean turned() {
+        return turned;
+    }
 
-	@Override
-	public CornerType[] getRecto() {
-		return recto.toArray(new CornerType[0]);
-	}
-	
-	@Override
-	public CornerType[] getVerso() {
-		return verso.toArray(new CornerType[0]);
-	}
-	
-	@Override
-	public ResourceType getKingdom() {
-		return null;
-	}
-	
+    @Override
+    public CornerType[] getRecto() {
+        return recto.toArray(new CornerType[0]);
+    }
+    
+    @Override
+    public CornerType[] getVerso() {
+        return verso.toArray(new CornerType[0]);
+    }
+    
+    @Override
+    public ResourceType getKingdom() {
+        return null;
+    }
+    
     public void drawCorners(Graphics2D g2d, double x, double y, double scale) {
         // Taille de carte par défaut : 120x78
         // Taille d'icône par défaut : 24x24
@@ -63,7 +62,7 @@ public class StarterCard implements Card {
         for (int i = 0; i < recto.size(); i++) {
             BufferedImage img = ImageLoader.get(recto.get(i), false);
             
-        	if (this.turned()) img = ImageLoader.get(verso.get(i), false);
+            if (this.turned) img = ImageLoader.get(verso.get(i), false);
 
             switch (i) {
                 case 0 -> ImageLoader.draw(g2d, (int) x, (int) y, img, scale); // haut gauche
@@ -76,27 +75,32 @@ public class StarterCard implements Card {
     }
 
     public void drawBase(Graphics2D g2d, double x, double y, double scale) {
-    	Objects.requireNonNull(g2d);
+        Objects.requireNonNull(g2d);
 
-        BufferedImage img = ImageLoader.getStarter(this.turned());
+        BufferedImage img = ImageLoader.getStarter(this.turned);
         g2d.drawImage(img, (int) x, (int) y, (int) (img.getWidth() * scale), (int) (img.getHeight() * scale), null);
     }
 
     public void draw(Graphics2D g2d, double x, double y, double scale) {
-    	Objects.requireNonNull(g2d);
+        Objects.requireNonNull(g2d);
         drawBase(g2d, x, y, scale);
         drawCorners(g2d, x, y, scale);
     }
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("\nStarterCard = recto : ");
-		builder.append(recto);
-		builder.append(", verso : ");
-		builder.append(verso);
-		builder.append(" et de resources : ");
-		builder.append(resources);
-		return builder.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("\nStarterCard = recto : ");
+        builder.append(recto);
+        builder.append(", verso : ");
+        builder.append(verso);
+        builder.append(" et de resources : ");
+        builder.append(resources);
+        return builder.toString();
+    }
+
+    @Override
+    public void turn() {
+        turned = !turned;
+    }
 }

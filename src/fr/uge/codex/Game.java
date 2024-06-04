@@ -33,7 +33,7 @@ public class Game {
 
 			int width = (int) context.getScreenInfo().getWidth();
 			int height = (int) context.getScreenInfo().getHeight();
-
+			
 			context.renderFrame(graphics -> {
 				Graphics2D g2d = (Graphics2D) graphics;
 				g2d.fill(new Rectangle2D.Float(0, 0, width, height));
@@ -51,7 +51,7 @@ public class Game {
 					board.displayOverlay(context, g2d);
 					player.drawHand(g2d, width, height);
 					player.drawPile(g2d, width, height);
-					drawSelectedCardOutline(g2d, handler, player, width, height);
+					handler.drawOutline(g2d, player, width, height);
 				});
 
 				// On attend une action
@@ -136,13 +136,13 @@ public class Game {
 					}
 				} else if (Menu.isClick(event)) {
 					Point click = new Point(
-							(int) event.getLocation().getX(),
-							(int) event.getLocation().getY()
+						(int) event.getLocation().getX(),
+						(int) event.getLocation().getY()
 					);
 
 					// CHECK PIOCHE
-					Rectangle pick1 = new Rectangle(230, 960, 168, 112);
-					Rectangle pick2 = new Rectangle(430, 960, 168, 112);
+					Rectangle pick1 = new Rectangle(230, 950, 168, 112);
+					Rectangle pick2 = new Rectangle(430, 950, 168, 112);
 
 					if (pick1.contains(click)) {
 						player.pick(0, deck);
@@ -151,37 +151,28 @@ public class Game {
 					}
 
 					// CHECK MAIN
-					Rectangle main1 = new Rectangle(830, 960, 168, 112);
-					Rectangle main2 = new Rectangle(1030, 960, 168, 112);
-					Rectangle main3 = new Rectangle(1230, 960, 168, 112);
+					Rectangle main1 = new Rectangle(830, 950, 168, 112);
+					Rectangle main2 = new Rectangle(1030, 950, 168, 112);
+					Rectangle main3 = new Rectangle(1230, 950, 168, 112);
 
-					if (main1.contains(click)) {
+					if (main1.contains(click) && player.getHand().size() > 0) {
 						handler.setCard(player.getHand().get(0));
 					} else if (main2.contains(click) && player.getHand().size() > 1) {
 						handler.setCard(player.getHand().get(1));
 					} else if (main3.contains(click) && player.getHand().size() > 2) {
 						handler.setCard(player.getHand().get(2));
 					}
+					// 32x32 at width - 460, height - 100
+					Rectangle turn = new Rectangle(width - 460, height - 100, 32, 32);
+					if (turn.contains(click)) {
+						player.turnCards();
+						System.out.println("Turned cards");
+					}
 
 				} else {
-					System.out.println(event.getAction().toString());
+					// System.out.println(event.getAction().toString()); // DEBUG
 				}
 			}
 		});
-	}
-
-	private static void drawSelectedCardOutline(Graphics2D g2d, SelectedCardHandler handler, Player player, int width, int height) {
-		Card selectedCard = handler.getCard();
-		if (selectedCard == null) {
-			return;
-		}
-		int index = player.getHand().indexOf(selectedCard);
-		if (index == -1) {
-			return;
-		}
-		int x = 830 + 200 * index;
-		int y = 960;
-		g2d.setColor(Color.RED);
-		g2d.drawRect(x - 2, y - 2, 172, 116); // Draw a red outline around the selected card
 	}
 }

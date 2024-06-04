@@ -8,4 +8,5 @@ public interface Card {
 	CornerType[] getVerso();
 	ResourceType getKingdom();
 	void draw(Graphics2D g2d, double x, double y, double scale);
+	void turn();
 }

@@ -172,7 +172,7 @@ public class Inventory {
                 }
             } else if (card instanceof ResourceCard) {
                 ResourceCard resourceCard = (ResourceCard) card;
-                for (CornerType corner : resourceCard.recto()) {
+                for (CornerType corner : resourceCard.getRecto()) {
                     addResource(corner, 1);
                 }
                 score += resourceCard.score().points();
