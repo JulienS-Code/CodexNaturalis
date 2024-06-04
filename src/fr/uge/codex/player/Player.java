@@ -40,6 +40,10 @@ public class Player {
 		return hand;
 	}
 	
+	public void addCardToInventory(Card card) {
+		inventory.updateInventory(card);
+	}
+	
 	public boolean pick(int index, Deck deck) {
 		Objects.requireNonNull(deck);
 		if (index < 0 || index >= drawPile.size()) {
