@@ -16,11 +16,6 @@ public class ObjectiveCard implements Card {
 		this.score = Objects.requireNonNull(score);
 	}
 	
-	@Override
-	public CornerType[] getVerso() {
-		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
-	}
-	
 	public ObjectiveType getType() {
 		return type;
 	}

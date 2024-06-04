@@ -29,11 +29,6 @@ public class StarterCard implements Card {
         this.turned = false;
     }
     
-
-	@Override
-	public CornerType[] getVerso() {
-		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
-	}
     
     public List<ResourceType> resources() {
 	    return resources;

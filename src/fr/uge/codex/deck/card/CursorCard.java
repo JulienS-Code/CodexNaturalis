@@ -18,11 +18,6 @@ public record CursorCard() implements Card {
         cost.add(OtherCornerType.Empty);
         cost.add(OtherCornerType.Empty);
     }
-
-	@Override
-	public CornerType[] getVerso() {
-		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
-	}
 	
     @Override
     public boolean turned() {
