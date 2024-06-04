@@ -10,7 +10,8 @@ import java.util.Objects;
 import fr.uge.codex.ImageLoader;
 
 public record GoldCard(CornerType[] recto, ResourceType kingdom, List<CornerType> cost, Scoring score) implements Card {
-
+	static boolean turned = false;
+	
     public GoldCard {
         Objects.requireNonNull(recto, "Recto must not be null");
         if (recto.length != 4) {
@@ -19,17 +20,21 @@ public record GoldCard(CornerType[] recto, ResourceType kingdom, List<CornerType
         Objects.requireNonNull(kingdom, "Kingdom must not be null");
         Objects.requireNonNull(cost, "Cost must not be null");
         Objects.requireNonNull(score);
-        boolean turned = false;
     }
 
     @Override
     public boolean turned() {
-        return turned();
+        return turned;
     }
 
     @Override
     public CornerType[] getRecto() {
         return recto;
+    }
+    
+    @Override
+    public ResourceType getKingdom() {
+    	return kingdom;
     }
 
     public void drawCorners(Graphics2D g2d, double x, double y, double scale) {

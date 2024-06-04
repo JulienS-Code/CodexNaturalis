@@ -36,6 +36,11 @@ public class ObjectiveCard implements Card {
 	public CornerType[] getRecto() {
 		return criteria.toArray(new CornerType[0]);
 	}
+	
+	@Override
+	public ResourceType getKingdom() {
+		return null;
+	}
 
 	@Override
 	public String toString() {

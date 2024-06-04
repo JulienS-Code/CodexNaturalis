@@ -27,6 +27,11 @@ public record StarterCard(List<ResourceType> recto, List<CornerType> verso, List
 	public CornerType[] getRecto() {
 		return recto.toArray(new CornerType[0]);
 	}
+	
+	@Override
+	public ResourceType getKingdom() {
+		return null;
+	}
 
 	@Override
 	public String toString() {

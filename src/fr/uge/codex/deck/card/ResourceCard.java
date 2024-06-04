@@ -2,15 +2,14 @@ package fr.uge.codex.deck.card;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import fr.uge.codex.ImageLoader;
 
 public record ResourceCard(CornerType[] recto, ResourceType kingdom, Scoring score) implements Card {
+	static boolean turned = false;
 	
     public ResourceCard {
         Objects.requireNonNull(recto, "Recto must not be null");
@@ -19,17 +18,21 @@ public record ResourceCard(CornerType[] recto, ResourceType kingdom, Scoring sco
         }
         Objects.requireNonNull(kingdom, "Kingdom must not be null");
         Objects.requireNonNull(score, "Score must not be null");
-        boolean turned = false;
     }
 
     @Override
     public boolean turned() {
-        return turned();
+        return turned;
     }
 
     @Override
     public CornerType[] getRecto() {
         return recto;
+    }
+    
+    @Override
+    public ResourceType getKingdom() {
+    	return kingdom;
     }
 
     public void drawCorners(Graphics2D g2d, double x, double y, double scale) {
