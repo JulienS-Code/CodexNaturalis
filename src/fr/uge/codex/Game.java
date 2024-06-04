@@ -27,7 +27,7 @@ public class Game {
 		Application.run(Color.BLACK, context -> {
 			Menu.renderMenu(context);
 			Board board = new Board(context);
-			board.add(deck.pickStarterCard(), 0, 0, true);
+			board.add(deck.pickStarterCard(), 0, 0, true, player.inventory());
 
 			int width = (int) context.getScreenInfo().getWidth();
 			int height = (int) context.getScreenInfo().getHeight();
@@ -49,6 +49,7 @@ public class Game {
 					board.displayOverlay(context, g2d);
 					player.drawHand(g2d, width, height);
 					player.drawPile(g2d, width, height);
+					player.inventory().drawScore(g2d);
 					handler.drawOutline(g2d, player, width, height);
 				});
 
@@ -101,7 +102,7 @@ public class Game {
 							if (selectedCard == null) {
 								continue;
 							}
-							if (board.add(selectedCard, cursorX, cursorY)) {
+							if (board.add(selectedCard, cursorX, cursorY, player.inventory())) {
 								player.addCardToInventory(selectedCard);
 								player.remove(selectedCard);
 								handler.setCard(null);

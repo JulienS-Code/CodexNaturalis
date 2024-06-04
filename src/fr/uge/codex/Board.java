@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,9 @@ import java.util.Objects;
 import fr.uge.codex.deck.card.Card;
 import fr.uge.codex.deck.card.CornerType;
 import fr.uge.codex.deck.card.CursorCard;
+import fr.uge.codex.deck.card.GoldCard;
 import fr.uge.codex.deck.card.OtherCornerType;
+import fr.uge.codex.player.Inventory;
 import fr.umlv.zen5.ApplicationContext;
 
 public class Board {
@@ -50,8 +53,8 @@ public class Board {
      * @return true if the card was successfully added, false otherwise.
      * @throws NullPointerException if card is null.
      */
-    public boolean add(Card card, int x, int y) {
-        return add(card, x, y, false);
+    public boolean add(Card card, int x, int y, Inventory inventory) {
+        return add(card, x, y, false, inventory);
     }
     
     /**
@@ -64,7 +67,7 @@ public class Board {
      * @return true if the card was successfully added, false otherwise.
      * @throws NullPointerException if card is null.
      */
-    public boolean add(Card card, int x, int y, boolean isStarter) {
+    public boolean add(Card card, int x, int y, boolean isStarter, Inventory inventory) {
         Objects.requireNonNull(card);
 
         if (card instanceof CursorCard) {
@@ -75,11 +78,25 @@ public class Board {
             // System.out.println("DEBUG: La case ("+x+","+y+") est déjà occupée");
             return false;
         }
-        
+
         if (!isStarter) {
             if (!isPlayable(x, y)) {
                 // System.out.println("DEBUG: La case ("+x+","+y+") n'est pas jouable");
                 return false;
+            }
+            
+            if (card instanceof GoldCard) {
+                GoldCard goldCard = (GoldCard) card;
+                for (CornerType cost : goldCard.cost()) {
+                    if (!inventory.removeResource(cost, 1)) {
+                        System.out.println("Not enough resources to cover the cost of the GoldCard");
+                        
+                        for (CornerType rollbackCost : goldCard.cost()) {
+                            inventory.addResource(rollbackCost, 1);
+                        }
+                        return false;
+                    }
+                }
             }
         }
         

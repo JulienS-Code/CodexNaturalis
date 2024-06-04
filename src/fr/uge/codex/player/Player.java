@@ -31,6 +31,14 @@ public class Player {
         this.drawPile = new ArrayList<Card>();
     }
 
+	/**
+	 * Gets the player's inventory.
+	 * @return The player's inventory.
+	 */
+	public Inventory inventory() {
+		return inventory;
+	}
+	
     /**
      * Initializes the draw pile with resource and gold cards from the provided deck.
      * @param deck The deck to initialize the draw pile from.
