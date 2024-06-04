@@ -31,7 +31,7 @@ public class Inventory {
         this.manuscript = 0;
         this.inkwell = 0;
     }
-    
+
     // Animal
     public int animal() {
         return animal;
@@ -149,7 +149,7 @@ public class Inventory {
         return score;
     }
 
-    public void addCardToInventory(Card card) {
+    public void updateInventory(Card card) {
         Objects.requireNonNull(card);
         
         System.out.println(card);
