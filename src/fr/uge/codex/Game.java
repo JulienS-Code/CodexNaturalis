@@ -104,7 +104,7 @@ public class Game {
 								continue;
 							}
 							if (board.add(selectedCard, cursorX, cursorY)) {
-								inventory.addCardToInventory(selectedCard);
+								player.addCardToInventory(selectedCard);
 								player.remove(selectedCard);
 								handler.setCard(null);
 							}
