@@ -10,10 +10,9 @@ import fr.uge.codex.deck.card.GoldCard;
 import fr.uge.codex.deck.card.ResourceCard;
 import fr.uge.codex.deck.card.ResourceType;
 import fr.uge.codex.deck.card.Scoring;
-import fr.uge.codex.deck.card.ScoringType;
 import fr.uge.codex.deck.card.StarterCard;
 
-public class Inventary {
+public class Inventory {
     private int animal;
     private int plant;
     private int fungi;
@@ -23,7 +22,7 @@ public class Inventary {
     private int inkwell;
     private int score;
 
-    public Inventary() {
+    public Inventory() {
         this.animal = 0;
         this.plant = 0;
         this.fungi = 0;
@@ -150,7 +149,7 @@ public class Inventary {
         return score;
     }
 
-    public void addCardToInventary(Card card) {
+    public void addCardToInventory(Card card) {
         Objects.requireNonNull(card);
         
         System.out.println(card);
@@ -278,7 +277,7 @@ public class Inventary {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Inventary = {animal :");
+        builder.append("Inventory = {animal : ");
         builder.append(animal);
         builder.append(", plant : ");
         builder.append(plant);

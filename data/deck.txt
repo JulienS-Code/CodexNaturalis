@@ -62,14 +62,14 @@ GoldCard Recto A:Inkwell Empty Empty Invisible Kingdom Animal Cost Animal Animal
 GoldCard Recto Invisible Empty Invisible Empty Kingdom Animal Cost Animal Animal Animal Animal Animal Scoring D:5
 GoldCard Recto A:Quill Empty Invisible Invisible Kingdom Fungi Cost Fungi Fungi Fungi Scoring D:3
 GoldCard Recto Empty Invisible A:Manuscript Empty Kingdom Insect Cost Insect Insect Animal Scoring M:1
-GoldCard Recto Empty Empty Invisible Invsible Kingdom Plant Cost Plant Plant Plant Plant Plant Scoring D:5
+GoldCard Recto Empty Empty Invisible Invisible Kingdom Plant Cost Plant Plant Plant Plant Plant Scoring D:5
 GoldCard Recto Empty Invisible Empty Empty Kingdom Fungi Cost Fungi Fungi Fungi Insect Scoring C:2
 GoldCard Recto Empty A:Quill Invisible Empty Kingdom Insect Cost Insect Insect Plant Scoring Q:1
 GoldCard Recto A:Manuscript Empty Empty Invisible Kingdom Fungi Cost Fungi Fungi Insect Scoring M:1
 GoldCard Recto Empty A:Inkwell Invisible Empty Kingdom Fungi Cost Fungi Fungi Plant Scoring I:1
 GoldCard Recto A:Quill Empty Empty Invisible Kingdom Plant Cost Plant Plant Insect Scoring Q:1
 GoldCard Recto Empty A:Inkwell Invisible Invisible Kingdom Animal Cost Animal Animal Animal Scoring D:3
-GoldCard Recto Empty Invisible Empty Invsiible Kingdom Fungi Cost Fungi Fungi Fungi Fungi Fungi Scoring D:5
+GoldCard Recto Empty Invisible Empty Invisible Kingdom Fungi Cost Fungi Fungi Fungi Fungi Fungi Scoring D:5
 GoldCard Recto Empty A:Manuscript Invisible Empty Kingdom Plant Cost Plant Plant Fungi Scoring M:1
 GoldCard Recto Empty Empty Invisible Empty Kingdom Insect Cost Insect Insect Insect Animal Scoring C:2
 GoldCard Recto Empty Empty Invisible Empty Kingdom Animal Cost Animal Animal Animal Insect Scoring C:2

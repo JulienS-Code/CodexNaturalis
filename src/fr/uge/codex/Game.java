@@ -2,15 +2,14 @@ package fr.uge.codex;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
 import fr.uge.codex.deck.Deck;
 import fr.uge.codex.deck.card.Card;
-import fr.uge.codex.deck.card.StarterCard;
-import fr.uge.codex.player.Inventary;
-import fr.uge.memory.SimpleGameData;
-import fr.uge.memory.SimpleGameView;
-
+import fr.uge.codex.player.Inventory;
+import fr.uge.codex.player.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.ApplicationContext;
 import fr.umlv.zen5.Event;
@@ -19,41 +18,36 @@ import fr.umlv.zen5.Event.Action;
 public class Game {
 	
 	public Game() {
-		
-	}
-	
-	public static boolean gameLoop(ApplicationContext context, SimpleGameData data, SimpleGameView view) {
-		return false;
 	}
 	
 	public static void codexNaturalis(ApplicationContext context) {
-		Deck deck = new Deck();
 		System.out.println("Début de la partie, voici le deck non mélangé : ");
-		System.out.println(deck);
 	}
 	
 	public static void main(String[] args) {
 		Deck deck = new Deck();
 		System.out.println(deck);
-        Inventary inventary = new Inventary();
+		Inventory inventory = new Inventory();
+		Player player = new Player(0);
+		
+		player.initPile(deck);
 		
         Application.run(Color.BLACK, context -> {
         	Menu.renderMenu(context);
         	Board board = new Board(context);
 			board.add(deck.pickStarterCard(), 0, 0, true);
+        	
+			int width = (int) context.getScreenInfo().getWidth();
+			int height = (int) context.getScreenInfo().getHeight();
 			
         	context.renderFrame(graphics -> {
                 Graphics2D g2d = (Graphics2D) graphics;
-                g2d.fill(new Rectangle2D.Float(
-    				0, 0,
-    				context.getScreenInfo().getWidth(),
-    				context.getScreenInfo().getHeight())
-                );
+                g2d.fill(new Rectangle2D.Float(0, 0, width, height));
             }); // On efface le menu
-        	
+			
             int cursorX = 0;
             int cursorY = 0;
-            Card currentCard = (Card) deck.pickResourceCard();
+            Card selectedCard = null;
             board.setCursor(cursorX, cursorY);
             
             while (true) {
@@ -61,11 +55,13 @@ public class Game {
                     Graphics2D g2d = (Graphics2D) graphics;
 					board.display(g2d);
 					board.displayOverlay(context, g2d);
+					player.drawHand(g2d, width, height);
+					player.drawPile(g2d, width, height);
                 });
 
                 // On attend une action
                 
-                Event event = context.pollOrWaitEvent(1000);
+                Event event = context.pollOrWaitEvent(2500);
 				if (event == null) {
 					continue;
 				}
@@ -108,9 +104,13 @@ public class Game {
 						
 						// Ajout de cartes
 						case "SPACE":
-							if (board.add(currentCard, cursorX, cursorY)) {
-								inventary.addCardToInventary(currentCard);
-								currentCard = deck.pickResourceCard();
+							if (selectedCard == null) {
+								continue;
+							}
+							if (board.add(selectedCard, cursorX, cursorY)) {
+								inventory.addCardToInventory(selectedCard);
+								player.remove(selectedCard);
+								selectedCard = null;
 							}
 							break;
 							
@@ -138,6 +138,36 @@ public class Game {
 							System.out.println(event.getKey().toString());
 							break;
 					}
+				} else if (Menu.isClick(event)) {
+					Point click = new Point(
+							(int) event.getLocation().getX(),
+							(int) event.getLocation().getY()
+					);
+					
+					// CHECK PIOCHE
+					Rectangle pick1 = new Rectangle(230, 960, 168, 112);
+					Rectangle pick2 = new Rectangle(430, 960, 168, 112);
+					
+					if (pick1.contains(click)) {
+						player.pick(0, deck);
+					} else if (pick2.contains(click)) {
+						player.pick(1, deck);
+					}
+					
+					// CHECK MAIN
+					Rectangle main1 = new Rectangle(830, 960, 168, 112);
+					Rectangle main2 = new Rectangle(1030, 960, 168, 112);
+					Rectangle main3 = new Rectangle(1230, 960, 168, 112);
+					
+					if (main1.contains(click)) {
+						selectedCard = player.getHand().get(0);
+						System.out.println("Carte 1 sélectionnée");
+					} else if (main2.contains(click) && player.getHand().size() > 1) {
+						selectedCard = player.getHand().get(1);
+					} else if (main3.contains(click) && player.getHand().size() > 2) {
+						selectedCard = player.getHand().get(2);
+					}
+					
 				} else {
 					System.out.println(event.getAction().toString());
 				}

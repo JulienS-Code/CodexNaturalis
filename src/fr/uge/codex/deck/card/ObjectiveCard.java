@@ -66,6 +66,4 @@ public class ObjectiveCard implements Card {
 	public void draw(Graphics2D g2d, double x, double y, double scale) {
 		return;
 	}
-
 }
-

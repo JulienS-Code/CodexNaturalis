@@ -296,11 +296,20 @@ public class Board {
 	public void displayOverlay(ApplicationContext context, Graphics2D g2d) {
 		Objects.requireNonNull(context);
 		Objects.requireNonNull(g2d);
+		
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, height - 200, width, 200);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(0, height - 200, width, 200);
 
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(0, 0, width / 6, height);
+		g2d.fillRect(0, 0, 200, height);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(-1, -1, width / 6, height+2);
+		g2d.drawRect(-1, -1, 200, height+2);
 		
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(width - 200, 0, 200, height);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(width - 200, -1, 200, height+2);
 	}
 }

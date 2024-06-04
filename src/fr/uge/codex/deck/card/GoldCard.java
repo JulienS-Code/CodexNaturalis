@@ -2,8 +2,8 @@ package fr.uge.codex.deck.card;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,52 +44,56 @@ public record GoldCard(CornerType[] recto, ResourceType kingdom, List<CornerType
     }
 
     public void drawCorners(Graphics2D g2d, double x, double y, double scale) {
-        // // Taille de carte par défaut : 120x78
-		// Taille d'icône par défaut : 24x24
-		
-		Objects.requireNonNull(g2d);
-		
-		int i = 0;
-		
-		for (CornerType corner : recto) {
-			BufferedImage img = ImageLoader.get(corner, false);
-			
-			switch (i) {
-			    case 0:
-			        // haut gauche
-			        ImageLoader.draw(g2d, (int) x, (int) y, img, scale);
-			        break;
-			    case 1:
-			        // haut droite
-			        ImageLoader.draw(g2d, (int)((x + 120 * scale) - 24 * scale), (int) y, img, scale);
-			        break;
-			    case 2:
-			        // bas gauche
-			    	ImageLoader.draw(g2d, (int) x, (int)((y + 80 * scale) - 24 * scale), img, scale);
-			    	break;
-			    case 3:
-			        // bas droite
-			    	ImageLoader.draw(g2d, (int)((x + 120 * scale) - 24 * scale), (int)((y + 80 * scale) - 24 * scale), img, scale);
-			    	break;
-			    default:
-			        System.err.println("Erreur: Plus de 4 coins?");
-			}
-			i++;
-		}
+        // Taille de carte par défaut : 120x78
+        // Taille d'icône par défaut : 24x24
+    	// Taille de remplissage pour coin invisible : 32x36
+
+        Objects.requireNonNull(g2d);
+        
+    	var colorMap = new HashMap<CornerType, Color>();
+    	colorMap.put(ResourceType.Fungi, new Color(240, 69, 46));
+    	colorMap.put(ResourceType.Insect, new Color(157, 55, 155));
+    	colorMap.put(ResourceType.Plant, new Color(102, 198, 116));
+    	colorMap.put(ResourceType.Animal, new Color(110, 204, 191));
+
+        for (int i = 0; i < recto.length; i++) {
+        	if (recto[i] == OtherCornerType.Invisible) {
+        		// Corner size: 32x36
+				Color color = colorMap.get(kingdom);
+				g2d.setColor(color);
+
+	            int scaledWidth = (int) (30 * scale);
+	            int scaledHeight = (int) (37 * scale);
+	            
+		        switch (i) {
+	                case 0 -> g2d.fillRect((int) x, (int) y, scaledWidth, scaledHeight); // haut gauche
+	                case 1 -> g2d.fillRect((int) (x + (120 * scale) - scaledWidth), (int) y, scaledWidth, scaledHeight); // haut droite
+	                case 2 -> g2d.fillRect((int) x, (int) (y + (80 * scale) - scaledHeight), scaledWidth, scaledHeight); // bas gauche
+	                case 3 -> g2d.fillRect((int) (x + (120 * scale) - scaledWidth), (int) (y + (80 * scale) - scaledHeight), scaledWidth, scaledHeight); // bas droite
+	                default -> System.err.println("Erreur: Plus de 4 coins?");
+		        }
+		        continue;
+        	} else if (recto[i] == OtherCornerType.Empty) {
+        		continue;
+        	}
+        	
+            BufferedImage img = ImageLoader.get(recto[i], false);
+
+            switch (i) {
+                case 0 -> ImageLoader.draw(g2d, (int) x, (int) y, img, scale); // haut gauche
+                case 1 -> ImageLoader.draw(g2d, (int) ((x + 120 * scale) - 24 * scale), (int) y, img, scale); // haut droite
+                case 2 -> ImageLoader.draw(g2d, (int) x, (int) ((y + 78 * scale) - 24 * scale), img, scale); // bas gauche
+                case 3 -> ImageLoader.draw(g2d, (int) ((x + 120 * scale) - 24 * scale), (int) ((y + 78 * scale) - 24 * scale), img, scale); // bas droite
+                default -> System.err.println("Erreur: Plus de 4 coins?");
+            }
+        }
     }
 
     public void drawBase(Graphics2D g2d, double x, double y, double scale) {
     	Objects.requireNonNull(g2d);
+
         BufferedImage img = ImageLoader.get(kingdom, true, true);
-        int width = (int) (img.getWidth() * scale);
-        int height = (int) (img.getHeight() * scale);
-        RoundRectangle2D outerRect = new RoundRectangle2D.Double(x, y, width, height, 5 * scale, 5 * scale);
-        g2d.setColor(Color.BLACK);
-        g2d.fill(outerRect);
-        RoundRectangle2D innerRect = new RoundRectangle2D.Double(x + 1, y + 1, width - 2, height - 2, 5 * scale, 5 * scale);
-        g2d.clip(innerRect);
-        g2d.drawImage(img, (int) x, (int) y, width, height, null);
-        g2d.setClip(null);
+        g2d.drawImage(img, (int) x, (int) y, (int) (img.getWidth() * scale), (int) (img.getHeight() * scale), null);
     }
 
     public void draw(Graphics2D g2d, double x, double y, double scale) {
