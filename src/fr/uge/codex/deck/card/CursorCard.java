@@ -27,10 +27,14 @@ public record CursorCard() implements Card {
     }
 
     @Override
-    public CornerType[] getRecto() {
-        CornerType[] recto = {OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
-        return recto;
-    }
+	public CornerType[] getRecto() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
+    
+    @Override
+	public CornerType[] getVerso() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
     
     @Override
     public ResourceType getKingdom() {

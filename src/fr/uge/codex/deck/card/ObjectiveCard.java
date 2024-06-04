@@ -38,6 +38,11 @@ public class ObjectiveCard implements Card {
 	}
 	
 	@Override
+	public CornerType[] getVerso() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
+	
+	@Override
 	public ResourceType getKingdom() {
 		return null;
 	}
