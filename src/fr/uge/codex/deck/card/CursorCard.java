@@ -12,15 +12,18 @@ public record CursorCard() implements Card {
         if (recto.length != 4) {
             throw new IllegalArgumentException("Corners must contain exactly 4 elements");
         }
-        Scoring score = Scoring.none();
         List<CornerType> cost = new ArrayList<CornerType>();
         cost.add(OtherCornerType.Empty);
         cost.add(OtherCornerType.Empty);
         cost.add(OtherCornerType.Empty);
         cost.add(OtherCornerType.Empty);
-        boolean turned = false;
     }
 
+	@Override
+	public CornerType[] getVerso() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
+	
     @Override
     public boolean turned() {
         return turned();
@@ -37,7 +40,12 @@ public record CursorCard() implements Card {
     	return null;
     }
     
-    public static void draw(Graphics2D g2d, double x, double y, double scale) {
+    @Override
+    public void draw(Graphics2D g2d, double x, double y, double scale) {
+	    draw(g2d, x, y, scale);
+    }
+    
+    public static void drawCursor(Graphics2D g2d, double x, double y, double scale) {
         int width = (int) (120 * scale);
         int height = (int) (80 * scale);
         g2d.setColor(new Color(255, 255, 0, 102));

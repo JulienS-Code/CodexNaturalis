@@ -10,9 +10,7 @@ import java.util.Objects;
 import fr.uge.codex.deck.card.Card;
 import fr.uge.codex.deck.card.CornerType;
 import fr.uge.codex.deck.card.CursorCard;
-import fr.uge.codex.deck.card.GoldCard;
 import fr.uge.codex.deck.card.OtherCornerType;
-import fr.uge.codex.deck.card.ResourceCard;
 import fr.umlv.zen5.ApplicationContext;
 
 public class Board {
@@ -40,7 +38,6 @@ public class Board {
 	
 	public boolean add(Card card, int x, int y, boolean isStarter) {
 		Objects.requireNonNull(card);
-	
 
 		if (card instanceof CursorCard) {
 			grid.add(x, y, card); // Elle s'ajoute à grid.cursorCards
@@ -50,7 +47,6 @@ public class Board {
 			System.out.println("DEBUG: La case ("+x+","+y+") est déjà occupée");
 			return false;
 		}
-		
 		
 		if (!isStarter) {
 			if (!isPlayable(x, y)) {
@@ -116,18 +112,14 @@ public class Board {
             Card card = grid.get(point);
             int displayX = point.x * scaledOffsetX + offsetX + Xoffset;
             int displayY = point.y * scaledOffsetY + offsetY + Yoffset;
-            if (card instanceof ResourceCard) {
-                ((ResourceCard) card).draw(g2d, displayX, displayY, scale);
-            } else if (card instanceof GoldCard) {
-                ((GoldCard) card).draw(g2d, displayX, displayY, scale);
-            } // TODO: polymorphisme pour Card.draw()
+            card.draw(g2d, displayX, displayY, scale);
         }
         
         Point point = grid.getCursorPoint();
         if (point != null) {
             int displayX = point.x * scaledOffsetX + offsetX + Xoffset;
             int displayY = point.y * scaledOffsetY + offsetY + Yoffset;
-            CursorCard.draw(g2d, displayX, displayY, scale);
+            CursorCard.drawCursor(g2d, displayX, displayY, scale);
         }
     }
     
@@ -299,5 +291,16 @@ public class Board {
 	public void removeCursor() {
 		grid.removeCursor();
 		needsReset = true;
+	}
+	
+	public void displayOverlay(ApplicationContext context, Graphics2D g2d) {
+		Objects.requireNonNull(context);
+		Objects.requireNonNull(g2d);
+
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, width / 6, height);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(-1, -1, width / 6, height+2);
+		
 	}
 }

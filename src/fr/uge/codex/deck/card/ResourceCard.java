@@ -10,8 +10,8 @@ import fr.uge.codex.ImageLoader;
 
 public record ResourceCard(CornerType[] recto, ResourceType kingdom, Scoring score) implements Card {
 	static boolean turned = false;
-	
-    public ResourceCard {
+
+	public ResourceCard {
         Objects.requireNonNull(recto, "Recto must not be null");
         if (recto.length != 4) {
             throw new IllegalArgumentException("Corners must contain exactly 4 elements");
@@ -19,6 +19,11 @@ public record ResourceCard(CornerType[] recto, ResourceType kingdom, Scoring sco
         Objects.requireNonNull(kingdom, "Kingdom must not be null");
         Objects.requireNonNull(score, "Score must not be null");
     }
+	
+	@Override
+	public CornerType[] getVerso() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
 
     @Override
     public boolean turned() {
@@ -55,7 +60,7 @@ public record ResourceCard(CornerType[] recto, ResourceType kingdom, Scoring sco
 				g2d.setColor(color);
 
 	            int scaledWidth = (int) (30 * scale);
-	            int scaledHeight = (int) (36 * scale);
+	            int scaledHeight = (int) (37 * scale);
 	            
 		        switch (i) {
 	                case 0 -> g2d.fillRect((int) x, (int) y, scaledWidth, scaledHeight); // haut gauche

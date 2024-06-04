@@ -168,7 +168,7 @@ public class Inventary {
             // Ajout des ressources du recto
             if (card instanceof StarterCard) {
                 StarterCard starterCard = (StarterCard) card;
-                for (ResourceType resource : starterCard.recto()) {
+                for (ResourceType resource : (ResourceType[]) starterCard.getRecto()) {
                     addResource(resource, 1);
                 }
             } else if (card instanceof ResourceCard) {

@@ -1,5 +1,6 @@
 package fr.uge.codex.deck.card;
 
+import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,24 +15,29 @@ public class ObjectiveCard implements Card {
 		this.criteria = Objects.requireNonNull(criteria);
 		this.score = Objects.requireNonNull(score);
 	}
-
+	
+	@Override
+	public CornerType[] getVerso() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
+	
 	public ObjectiveType getType() {
 		return type;
 	}
-
+	
 	public List<CornerType> getCriteria() {
 		return criteria;
 	}
-
+	
 	public Scoring getScore() {
 		return score;
 	}
-
+	
 	@Override
 	public boolean turned() {
 		return false;
 	}
-
+	
 	@Override
 	public CornerType[] getRecto() {
 		return criteria.toArray(new CornerType[0]);
@@ -45,7 +51,7 @@ public class ObjectiveCard implements Card {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("\nObjectiveCard de type ");
+		builder.append("\nObjectiveCards de type ");
 		builder.append(type);
 		builder.append(" de critères : ");
 		builder.append(criteria);
@@ -54,6 +60,11 @@ public class ObjectiveCard implements Card {
 		builder.append(") qui vaut ");
 		builder.append(score.points());
 		return builder.toString();
+	}
+
+	@Override
+	public void draw(Graphics2D g2d, double x, double y, double scale) {
+		return;
 	}
 
 }

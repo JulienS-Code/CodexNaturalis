@@ -16,26 +16,44 @@ import fr.uge.codex.deck.card.CornerType;
 
 public class ImageLoader {
     private static final Map<Path, BufferedImage> imageCache = new ConcurrentHashMap<>();
-
+    
     public static BufferedImage get(CornerType resource, boolean isCard) {
-        return get(resource, isCard, false);
+        return get(resource, isCard, false, false);
     }
-
+    
     public static BufferedImage get(CornerType resource, boolean isCard, boolean isGolden) {
+		return get(resource, isCard, isGolden, false);
+    }
+    
+    public static BufferedImage get(CornerType resource, boolean isCard, boolean isGolden, boolean isTurned) {
         Objects.requireNonNull(resource);
 
         Path imagePath;
         if (isCard) {
+        	String basePath = "./data/img/cards/recto/";
+			if (isTurned) {
+				basePath = "./data/img/cards/verso/";
+			}
             if (isGolden) {
-                imagePath = Paths.get("./data/img/cards/golden", "golden_" + resource.toString().toLowerCase() + ".png"); // golden card
+                imagePath = Paths.get(basePath + "golden", "golden_" + resource.toString().toLowerCase() + ".png"); // golden card
             } else {
-                imagePath = Paths.get("./data/img/cards", resource.toString().toLowerCase() + ".png"); // normal card
+                imagePath = Paths.get(basePath, resource.toString().toLowerCase() + ".png"); // normal card
             }
+            
         } else {
             imagePath = Paths.get("./data/img/icons", "icon_" + resource.toString().toLowerCase() + ".png"); // icon
         }
 
         return imageFromPath(imagePath);
+    }
+    
+    public static BufferedImage getStarter(boolean isTurned) {
+    	String basePath = "./data/img/cards/recto/";
+    	if (isTurned) {
+			basePath = "./data/img/cards/verso/";
+		}
+		Path imagePath = Paths.get(basePath, "starter.png");
+		return imageFromPath(imagePath);
     }
 
     public static BufferedImage imageFromPath(Path path) {

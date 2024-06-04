@@ -21,6 +21,12 @@ public record GoldCard(CornerType[] recto, ResourceType kingdom, List<CornerType
         Objects.requireNonNull(cost, "Cost must not be null");
         Objects.requireNonNull(score);
     }
+    
+
+	@Override
+	public CornerType[] getVerso() {
+		return new CornerType[]{OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty, OtherCornerType.Empty};
+	}
 
     @Override
     public boolean turned() {

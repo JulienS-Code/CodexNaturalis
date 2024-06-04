@@ -6,8 +6,7 @@ import java.awt.geom.Rectangle2D;
 
 import fr.uge.codex.deck.Deck;
 import fr.uge.codex.deck.card.Card;
-import fr.uge.codex.deck.card.GoldCard;
-import fr.uge.codex.deck.card.ResourceCard;
+import fr.uge.codex.deck.card.StarterCard;
 import fr.uge.codex.player.Inventary;
 import fr.uge.memory.SimpleGameData;
 import fr.uge.memory.SimpleGameView;
@@ -36,13 +35,12 @@ public class Game {
 	public static void main(String[] args) {
 		Deck deck = new Deck();
 		System.out.println(deck);
-        ResourceCard card = deck.pickResourceCard();
         Inventary inventary = new Inventary();
 		
         Application.run(Color.BLACK, context -> {
         	Menu.renderMenu(context);
         	Board board = new Board(context);
-			board.add(card, 0, 0, true);
+			board.add(deck.pickStarterCard(), 0, 0, true);
 			
         	context.renderFrame(graphics -> {
                 Graphics2D g2d = (Graphics2D) graphics;
@@ -62,6 +60,7 @@ public class Game {
                 context.renderFrame(graphics -> {
                     Graphics2D g2d = (Graphics2D) graphics;
 					board.display(g2d);
+					board.displayOverlay(context, g2d);
                 });
 
                 // On attend une action
@@ -88,16 +87,16 @@ public class Game {
 						
 						// Mouvement du plateau
 						case "UP":
-							board.move(0, -25);
-							break;
-						case "DOWN":
 							board.move(0, 25);
 							break;
+						case "DOWN":
+							board.move(0, -25);
+							break;
 						case "LEFT":
-							board.move(-25, 0);
+							board.move(25, 0);
 							break;
 						case "RIGHT":
-							board.move(25, 0);
+							board.move(-25, 0);
 							break;
 						case "R":
 							board.moveReset();
@@ -110,7 +109,7 @@ public class Game {
 						// Ajout de cartes
 						case "SPACE":
 							if (board.add(currentCard, cursorX, cursorY)) {
-								Inventary.addCardToInventary(inventary, currentCard);
+								inventary.addCardToInventary(currentCard);
 								currentCard = deck.pickResourceCard();
 							}
 							break;
