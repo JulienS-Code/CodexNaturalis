@@ -17,79 +17,124 @@ import fr.uge.codex.deck.card.OtherCornerType;
 import fr.umlv.zen5.ApplicationContext;
 
 public class Board {
-	Grid grid;
-	double scale = 1;
-	int width;
-	int height;
-	ApplicationContext ctx;
-	boolean needsReset = false;
-	int Xoffset = 0;
-	int Yoffset = 0;
-	
-	public Board(ApplicationContext context) {
-		Objects.requireNonNull(context);
-		
-		grid = new Grid();
-		width = (int) context.getScreenInfo().getWidth();
-		height = (int) context.getScreenInfo().getHeight();
-		ctx = context;
-	}
-	
-	public boolean add(Card card, int x, int y) {
-		return add(card, x, y, false);
-	}
-	
-	public boolean add(Card card, int x, int y, boolean isStarter) {
-		Objects.requireNonNull(card);
+    Grid grid;
+    double scale = 1;
+    int width;
+    int height;
+    ApplicationContext ctx;
+    boolean needsReset = false;
+    int Xoffset = 0;
+    int Yoffset = 0;
+    
+    /**
+     * Constructs a Board with the given ApplicationContext.
+     * 
+     * @param context the ApplicationContext of the game.
+     * @throws NullPointerException if context is null.
+     */
+    public Board(ApplicationContext context) {
+        Objects.requireNonNull(context);
+        
+        grid = new Grid();
+        width = (int) context.getScreenInfo().getWidth();
+        height = (int) context.getScreenInfo().getHeight();
+        ctx = context;
+    }
+    
+    /**
+     * Adds a card to the board at the specified coordinates.
+     * 
+     * @param card the card to add.
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @return true if the card was successfully added, false otherwise.
+     * @throws NullPointerException if card is null.
+     */
+    public boolean add(Card card, int x, int y) {
+        return add(card, x, y, false);
+    }
+    
+    /**
+     * Adds a card to the board at the specified coordinates with the option to set it as a starter card.
+     * 
+     * @param card the card to add.
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @param isStarter whether the card is a starter card.
+     * @return true if the card was successfully added, false otherwise.
+     * @throws NullPointerException if card is null.
+     */
+    public boolean add(Card card, int x, int y, boolean isStarter) {
+        Objects.requireNonNull(card);
 
-		if (card instanceof CursorCard) {
-			grid.add(x, y, card); // Elle s'ajoute à grid.cursorCards
-		}
-		
-		if (grid.get(x, y) != null) {
-			System.out.println("DEBUG: La case ("+x+","+y+") est déjà occupée");
-			return false;
-		}
-		
-		if (!isStarter) {
-			if (!isPlayable(x, y)) {
-				System.out.println("DEBUG: La case ("+x+","+y+") n'est pas jouable");
-				return false;
-			}
-		}
-		
-		grid.add(x, y, card);
-		return true;
-		
-		// TODO: vérifier si le coin est disponible avant de poser la carte
-		// on ne peut pas poser sur un coin Invisible ou s'il n'y a pas de carte voisine
-	}
-	
-	public boolean remove(int x, int y) {
-		if (grid.get(x, y) == null) {
-			return false;
-		}
-		grid.remove(x, y);
-		return true;
-	}
-	
-	public Card pop(int x, int y) {
-		Card card = grid.get(x, y);
-		if (card == null) {
-			return null;
-		}
-		grid.remove(x, y);
-		return card;
-	}
-	
+        if (card instanceof CursorCard) {
+            grid.add(x, y, card); // Elle s'ajoute à grid.cursorCards
+        }
+        
+        if (grid.get(x, y) != null) {
+            // System.out.println("DEBUG: La case ("+x+","+y+") est déjà occupée");
+            return false;
+        }
+        
+        if (!isStarter) {
+            if (!isPlayable(x, y)) {
+                // System.out.println("DEBUG: La case ("+x+","+y+") n'est pas jouable");
+                return false;
+            }
+        }
+        
+        grid.add(x, y, card);
+        return true;
+        
+        // TODO: vérifier si le coin est disponible avant de poser la carte
+        // on ne peut pas poser sur un coin Invisible ou s'il n'y a pas de carte voisine
+    }
+    
+    /**
+     * Removes a card from the board at the specified coordinates.
+     * 
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @return true if the card was successfully removed, false otherwise.
+     */
+    public boolean remove(int x, int y) {
+        if (grid.get(x, y) == null) {
+            return false;
+        }
+        grid.remove(x, y);
+        return true;
+    }
+    
+    /**
+     * Removes and returns the card at the specified coordinates.
+     * 
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @return the card that was removed, or null if there was no card at the specified coordinates.
+     */
+    public Card pop(int x, int y) {
+        Card card = grid.get(x, y);
+        if (card == null) {
+            return null;
+        }
+        grid.remove(x, y);
+        return card;
+    }
+    
+    /**
+     * Displays the board using the specified Graphics2D context.
+     * 
+     * @param g2d the Graphics2D context.
+     * @throws NullPointerException if g2d is null.
+     */
     public void display(Graphics2D g2d) {
-    	Objects.requireNonNull(g2d);
-    	
+        Objects.requireNonNull(g2d);
+        
         if (grid.isEmpty()) return;
         
         if (needsReset) {
-        	erase(g2d);
-        	needsReset = false;
+            erase(g2d);
+            needsReset = false;
         }
 
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
@@ -126,82 +171,130 @@ public class Board {
         }
     }
     
+    /**
+     * Erases the current board display.
+     * 
+     * @param g2d the Graphics2D context.
+     * @throws NullPointerException if g2d is null.
+     */
     public void erase(Graphics2D g2d) {
-    	g2d.setColor(Color.BLACK);
-		g2d.fillRect(0, 0, width, height);
+        Objects.requireNonNull(g2d);
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, width, height);
     }
     
+    /**
+     * Zooms in on the board.
+     */
     public void zoomIn() {
-		scale *= 1.1;
-		needsReset = true;
-	}
-	
-	public void zoomOut() {
-		scale *= 0.9;
-		needsReset = true;
-	}
-	
-	public void zoomReset() {
-		scale = 1;
-		needsReset = true;
-	}
-	
-	public void reset() {
-		grid = new Grid();
-		needsReset = true;
-	}
-	
-	public void move(int x, int y) {
-		Xoffset += x;
-		Yoffset += y;
-		needsReset = true;
-	}
-	
-	public void moveReset() {
-		Xoffset = 0;
-		Yoffset = 0;
-		needsReset = true;
-	}
-	
-	public boolean isPlayable(int x, int y) {
-		if (grid.get(x, y) != null) {
-			return false;
-		}
-		
-		var corners = new ArrayList<CornerType>();
-		
-		//TODO: Vérifier si la carte est retournée, si oui on prend son verso
-		if (hasNeighbors(x, y)) {
-			return false;
-		}
+        scale *= 1.1;
+        needsReset = true;
+    }
+    
+    /**
+     * Zooms out of the board.
+     */
+    public void zoomOut() {
+        scale *= 0.9;
+        needsReset = true;
+    }
+    
+    /**
+     * Resets the zoom level of the board.
+     */
+    public void zoomReset() {
+        scale = 1;
+        needsReset = true;
+    }
+    
+    /**
+     * Resets the board, clearing all cards.
+     */
+    public void reset() {
+        grid = new Grid();
+        needsReset = true;
+    }
+    
+    /**
+     * Moves the board by the specified offsets.
+     * 
+     * @param x the x offset.
+     * @param y the y offset.
+     */
+    public void move(int x, int y) {
+        Xoffset += x;
+        Yoffset += y;
+        needsReset = true;
+    }
+    
+    /**
+     * Resets the board position to the default.
+     */
+    public void moveReset() {
+        Xoffset = 0;
+        Yoffset = 0;
+        needsReset = true;
+    }
+    
+    /**
+     * Checks if a card can be played at the specified coordinates.
+     * 
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @return true if the card can be played, false otherwise.
+     */
+    public boolean isPlayable(int x, int y) {
+        if (grid.get(x, y) != null) {
+            return false;
+        }
+        
+        var corners = new ArrayList<CornerType>();
+        
+        //TODO: Vérifier si la carte est retournée, si oui on prend son verso
+        if (hasNeighbors(x, y)) {
+            return false;
+        }
 
-		corners.addAll(checkDiagonals(x, y));
-		
-		if (corners.isEmpty()) {
-			return false;
-		} // pas de carte voisin
-		
-		for (CornerType corner : corners) {
-			if (corner instanceof OtherCornerType) {
-				if ((OtherCornerType) corner == OtherCornerType.Invisible) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
-	}
+        corners.addAll(checkDiagonals(x, y));
+        
+        if (corners.isEmpty()) {
+            return false;
+        } // pas de carte voisin
+        
+        for (CornerType corner : corners) {
+            if (corner instanceof OtherCornerType) {
+                if ((OtherCornerType) corner == OtherCornerType.Invisible) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Gets the neighbors of the specified coordinates.
+     * 
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @return a list of neighboring points.
+     */
+    private List<Point> getNeighbors(int x, int y) {
+        List<Point> neighbors = new ArrayList<>();
+        neighbors.add(new Point(x, y - 1));
+        neighbors.add(new Point(x, y + 1));
+        neighbors.add(new Point(x - 1, y));
+        neighbors.add(new Point(x + 1, y));
+        return neighbors;
+    }
 	
-	
-	private List<Point> getNeighbors(int x, int y) {
-		List<Point> neighbors = new ArrayList<>();
-		neighbors.add(new Point(x, y - 1));
-		neighbors.add(new Point(x, y + 1));
-		neighbors.add(new Point(x - 1, y));
-		neighbors.add(new Point(x + 1, y));
-		return neighbors;
-	}
-	
+    /**
+     * Returns the diagonal neighbors of the given coordinates.
+     * 
+     * @param x the x-coordinate.
+     * @param y the y-coordinate.
+     * @return a list of diagonal points.
+     */
 	private List<Point> getDiagonals(int x, int y) {
 		List<Point> diagonals = new ArrayList<>();
 		diagonals.add(new Point(x - 1, y - 1));
@@ -211,6 +304,13 @@ public class Board {
 		return diagonals;
 	}
 	
+	/**
+	 * Checks if there are neighbors around the specified coordinates.
+	 *
+	 * @param x the x-coordinate.
+	 * @param y the y-coordinate.
+	 * @return true if there are neighbors, false otherwise.
+	 */
 	private boolean hasNeighbors(int x, int y) {
 		
 		List<Point> neighbors = getNeighbors(x, y);
@@ -243,7 +343,13 @@ public class Board {
 		return false;
 	}
 	
-	
+	/**
+	 * Checks the diagonal neighbors of the given coordinates and retrieves the corner types.
+	 * 
+	 * @param x the x-coordinate.
+	 * @param y the y-coordinate.
+	 * @return a list of CornerType representing the corners of the diagonal cards.
+	 */
 	private List<CornerType> checkDiagonals(int x, int y) {
 		
 		var diagonals = getDiagonals(x, y);
@@ -302,16 +408,32 @@ public class Board {
 		return corners;
 	}
 	
+	/**
+	 * Sets the cursor to the specified coordinates on the grid.
+	 * 
+	 * @param x the x-coordinate where the cursor should be placed.
+	 * @param y the y-coordinate where the cursor should be placed.
+	 */
 	public void setCursor(int x, int y) {
 		grid.setCursor(x, y);
 		needsReset = true;
 	}
 	
+	/**
+	 * Removes the cursor from the grid.
+	 */
 	public void removeCursor() {
 		grid.removeCursor();
 		needsReset = true;
 	}
 	
+	/**
+	 * Displays an overlay on the given Graphics2D context.
+	 * 
+	 * @param context the ApplicationContext of the game.
+	 * @param g2d the Graphics2D context to draw on.
+	 * @throws NullPointerException if context or g2d is null.
+	 */
 	public void displayOverlay(ApplicationContext context, Graphics2D g2d) {
 		Objects.requireNonNull(context);
 		Objects.requireNonNull(g2d);
@@ -337,6 +459,5 @@ public class Board {
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Arial", Font.BOLD, 26));
 		g2d.drawString("Retourner", width - 400, height - 68);
-		
 	}
 }

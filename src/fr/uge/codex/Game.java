@@ -9,7 +9,6 @@ import java.awt.geom.Rectangle2D;
 import fr.uge.codex.deck.Deck;
 import fr.uge.codex.deck.card.Card;
 import fr.uge.codex.deck.card.SelectedCardHandler;
-import fr.uge.codex.player.Inventory;
 import fr.uge.codex.player.Player;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
@@ -21,7 +20,6 @@ public class Game {
 		Deck deck = new Deck();
 		System.out.println("Début de la partie, voici le deck non mélangé : ");
 		System.out.println(deck);
-		Inventory inventory = new Inventory();
 		Player player = new Player(0);
 
 		player.initPile(deck);
@@ -131,7 +129,7 @@ public class Game {
 
 						// DEBUG
 						default:
-							System.out.println(event.getKey().toString());
+							// System.out.println(event.getKey().toString()); // DEBUG
 							break;
 					}
 				} else if (Menu.isClick(event)) {
@@ -166,11 +164,7 @@ public class Game {
 					Rectangle turn = new Rectangle(width - 460, height - 100, 200, 32);
 					if (turn.contains(click)) {
 						player.turnCards();
-						System.out.println("Turned cards");
 					}
-
-				} else {
-					// System.out.println(event.getAction().toString()); // DEBUG
 				}
 			}
 		});

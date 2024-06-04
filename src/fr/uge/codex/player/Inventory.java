@@ -10,6 +10,9 @@ import fr.uge.codex.deck.card.ResourceType;
 import fr.uge.codex.deck.card.Scoring;
 import fr.uge.codex.deck.card.StarterCard;
 
+/**
+ * Represents the inventory of a player, including the counts of different types of resources, artifacts, and the score.
+ */
 public class Inventory {
     private int animal;
     private int plant;
@@ -19,7 +22,10 @@ public class Inventory {
     private int manuscript;
     private int inkwell;
     private int score;
-
+    
+    /**
+     * Constructs an empty inventory with initial counts set to zero.
+     */
     public Inventory() {
         this.animal = 0;
         this.plant = 0;
@@ -153,7 +159,12 @@ public class Inventory {
     public int score() {
         return score;
     }
-
+    
+    /**
+     * Updates the inventory based on the provided card.
+     *
+     * @param card the card to update the inventory with.
+     */
     public void updateInventory(Card card) {
         Objects.requireNonNull(card);
         
@@ -295,7 +306,12 @@ public class Inventory {
             default -> {}
         }
     }
-
+    
+    /**
+     * Returns a string representation of the inventory.
+     *
+     * @return a string representation of the inventory.
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

@@ -5,12 +5,23 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Objects;
 
 import fr.umlv.zen5.ApplicationContext;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.Event.Action;
 
 public class Menu {
+	/**
+	 * Render the play button on the menu screen.
+	 * 
+	 * @param g2d       the graphics object.
+	 * @param playBtnX  the x-coordinate of the play button.
+	 * @param playBtnY  the y-coordinate of the play button.
+	 * @param btnW      the width of the button.
+	 * @param btnH      the height of the button.
+	 * @param newGameBox the rectangle representing the play button.
+	 */
 	public static void renderPlayButton(Graphics2D g2d, float playBtnX, float playBtnY, float btnW, float btnH, Rectangle2D newGameBox) {
         GradientPaint gradient = new GradientPaint(playBtnX, playBtnY, Color.LIGHT_GRAY, playBtnX, playBtnY + btnH, Color.DARK_GRAY);
         g2d.setPaint(gradient);
@@ -26,6 +37,16 @@ public class Menu {
         
 	}
 	
+	/**
+	 * Render the quit button on the menu screen.
+	 * 
+	 * @param g2d       the graphics object.
+	 * @param quitBtnX  the x-coordinate of the quit button.
+	 * @param quitBtnY  the y-coordinate of the quit button.
+	 * @param btnW      the width of the button.
+	 * @param btnH      the height of the button.
+	 * @param quitBox   the rectangle representing the quit button.
+	 */
 	public static void renderQuitButton(Graphics2D g2d, float quitBtnX, float quitBtnY, float btnW, float btnH, Rectangle2D quitBox) {
 		GradientPaint gradient = new GradientPaint(quitBtnX, quitBtnY, Color.LIGHT_GRAY, quitBtnX, quitBtnY + btnH, Color.DARK_GRAY);
 		g2d.setPaint(gradient);
@@ -40,6 +61,13 @@ public class Menu {
 		g2d.drawString(quitText, quitBtnX + (btnW - quitTextWidth) / 2, quitBtnY + (btnH + quitTextHeight) / 2 - 5);
 	}
 	
+	/**
+	 * Render the title of the game on the menu screen.
+	 * 
+	 * @param g2d  the graphics object.
+	 * @param w    the width of the screen.
+	 * @param h    the height of the screen.
+	 */
 	public static void renderTitle(Graphics2D g2d, float w, float h) {
 		String title = "CODEX NATURALIS";
         g2d.setColor(Color.WHITE);
@@ -48,7 +76,14 @@ public class Menu {
         g2d.drawString(title, (w - titleWidth) / 2, h /(10/3));
 	}
 	
+	/**
+	 * Check if the event corresponds to a left click.
+	 * 
+	 * @param event  the event to check.
+	 * @return true if the event is a click, false otherwise.
+	 */
 	public static boolean isClick(Event event) {
+
         if (event == null) {
 			return false;
 		}
@@ -62,7 +97,14 @@ public class Menu {
 		}
 	}
 	
+    /**
+     * Render the menu screen.
+     * 
+     * @param context  the application context.
+     */
     public static void renderMenu(ApplicationContext context) {
+    	Objects.requireNonNull(context);
+    	
         float w = context.getScreenInfo().getWidth();
         float h = context.getScreenInfo().getHeight();
 

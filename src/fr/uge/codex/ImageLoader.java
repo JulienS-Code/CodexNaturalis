@@ -17,14 +17,38 @@ import fr.uge.codex.deck.card.CornerType;
 public class ImageLoader {
     private static final Map<Path, BufferedImage> imageCache = new ConcurrentHashMap<>();
     
+    /**
+     * Get the BufferedImage for the specified CornerType.
+     *
+     * @param resource the CornerType.
+     * @param isCard   whether it's a card or an icon.
+     * @return the BufferedImage for the specified CornerType.
+     */
     public static BufferedImage get(CornerType resource, boolean isCard) {
         return get(resource, isCard, false, false);
     }
     
+    /**
+     * Get the BufferedImage for the specified CornerType, considering if it's a golden version.
+	 *
+	 * @param resource   the CornerType.
+	 * @param isCard     whether it's a card or an icon.
+	 * @param isGolden   whether it's a golden version.
+	 * @return the BufferedImage for the specified CornerType.
+     */
     public static BufferedImage get(CornerType resource, boolean isCard, boolean isGolden) {
 		return get(resource, isCard, isGolden, false);
     }
     
+    /**
+     * Get the BufferedImage for the specified CornerType, considering if it's a golden version and if it's turned.
+     *
+     * @param resource   the CornerType.
+     * @param isCard     whether it's a card or an icon.
+     * @param isGolden   whether it's a golden version.
+     * @param isTurned   whether it's turned.
+     * @return the BufferedImage for the specified CornerType.
+     */
     public static BufferedImage get(CornerType resource, boolean isCard, boolean isGolden, boolean isTurned) {
         Objects.requireNonNull(resource);
 
@@ -47,6 +71,12 @@ public class ImageLoader {
         return imageFromPath(imagePath);
     }
     
+    /**
+     * Get the BufferedImage for the starter card, considering if it's turned.
+     *
+     * @param isTurned   whether it's turned.
+     * @return the BufferedImage for the starter card.
+     */
     public static BufferedImage getStarter(boolean isTurned) {
     	String basePath = "./data/img/cards/recto/";
     	if (isTurned) {
@@ -56,7 +86,15 @@ public class ImageLoader {
 		return imageFromPath(imagePath);
     }
 
+    /**
+     * Load BufferedImage from the given path.
+     *
+     * @param path the path to the image file.
+     * @return the BufferedImage.
+     */
     public static BufferedImage imageFromPath(Path path) {
+    	Objects.requireNonNull(path);
+    	
         return imageCache.computeIfAbsent(path, p -> {
             try {
                 return ImageIO.read(p.toFile());
@@ -67,7 +105,19 @@ public class ImageLoader {
         });
     }
 
+    /**
+     * Draw the BufferedImage at the specified position with the specified scale.
+     *
+     * @param g2d   the Graphics2D object.
+     * @param x     the x-coordinate.
+     * @param y     the y-coordinate.
+     * @param img   the BufferedImage to draw.
+     * @param scale the scale factor.
+     */
     public static void draw(Graphics2D g2d, int x, int y, BufferedImage img, double scale) {
+    	Objects.requireNonNull(g2d);
+		Objects.requireNonNull(img);
+    
         if (scale == 1) {
             g2d.drawImage(img, x, y, null);
             return;
