@@ -263,20 +263,36 @@ public class Board {
 	            case -1:
 	                switch (yOffset) {
 	                    case -1:
-	                        corners.add(card.getRecto()[3]);
+	                    	if (card.turned()) {
+	                    		corners.add(card.getVerso()[3]);
+	                    	} else {
+	                    		corners.add(card.getRecto()[3]);
+	                    	}
 	                        break;
 	                    case 1:
-	                        corners.add(card.getRecto()[1]);
+	                    	if (card.turned()) {
+	                    		corners.add(card.getVerso()[1]);
+	                    	} else {
+	                    		corners.add(card.getRecto()[1]);
+	                    	}
 	                        break;
 	                }
 	                break;
 	            case 1:
 	                switch (yOffset) {
 	                    case -1:
-	                        corners.add(card.getRecto()[2]);
+	                    	if (card.turned()) {
+	                    		corners.add(card.getVerso()[2]);
+	                    	} else {
+	                    		corners.add(card.getRecto()[2]);
+	                    	}
 	                        break;
 	                    case 1:
-	                        corners.add(card.getRecto()[0]);
+	                    	if (card.turned()) {
+	                    		corners.add(card.getVerso()[0]);
+	                    	} else {
+	                    		corners.add(card.getRecto()[0]);
+	                    	}
 	                        break;
 	                }
 	                break;
