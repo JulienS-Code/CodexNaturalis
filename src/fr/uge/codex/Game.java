@@ -163,7 +163,7 @@ public class Game {
 						handler.setCard(player.getHand().get(2));
 					}
 					// 32x32 at width - 460, height - 100
-					Rectangle turn = new Rectangle(width - 460, height - 100, 32, 32);
+					Rectangle turn = new Rectangle(width - 460, height - 100, 200, 32);
 					if (turn.contains(click)) {
 						player.turnCards();
 						System.out.println("Turned cards");
